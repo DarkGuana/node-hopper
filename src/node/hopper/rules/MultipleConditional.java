@@ -38,4 +38,10 @@ public class MultipleConditional implements Conditional
     description.setLength(description.length()-4);
     return description.toString();
   }
+
+  @Override
+  public String toString()
+  {
+    return getDescription();
+  }
 }

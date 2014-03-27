@@ -41,7 +41,7 @@ public class PrioritizedConditionalRuleList implements ConditionalRule
     for (ConditionalRule rule : rules)
     {
       //depends on sub-rules being one line, could refactor to include an indent amount, but lets not go nuts just yet.
-      description.append("  ").append(rule.getDescription());
+      description.append("\n  ").append(rule.getDescription());
     }
     if (!rules.isEmpty())
       description.append("\n}");
@@ -57,5 +57,11 @@ public class PrioritizedConditionalRuleList implements ConditionalRule
         return true;
     }
     return false;
+  }
+
+  @Override
+  public String toString()
+  {
+    return getDescription();
   }
 }

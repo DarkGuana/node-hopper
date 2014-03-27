@@ -34,4 +34,9 @@ public class SimpleConditionalRule implements ConditionalRule
     description.append("then { ").append(rule.getDescription()).append(" }");
     return description.toString();
   }
+  @Override
+  public String toString()
+  {
+    return getDescription();
+  }
 }

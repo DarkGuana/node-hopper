@@ -1,50 +1,72 @@
 package node.hopper.node;
 
-import node.hopper.rules.Rule;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Dark Guana on 2014-03-22.
  */
-//TODO - convert Node to deal just with other Nodes, and add in a better return type than int.
 public class Node
 {
-  private static final Map<Integer, Node> commonNodeMap = new HashMap<Integer, Node>();
-
   private final Integer id;
-  private final Map<Integer, Integer> distances;
+  private final Set<Node> neighbors;
 
   public Node(Integer id)
   {
     this.id = id;
-    distances = new HashMap<Integer, Integer>();
-    distances.put(id, 0);
+    neighbors = new HashSet<Node>();
   }
 
-  public Node getNode(Integer id)
+  public Integer getId()
   {
-    if(!commonNodeMap.containsKey(id))
-      commonNodeMap.put(id, new Node(id));
-    return commonNodeMap.get(id);
+    return id;
   }
 
-  public void resetDistances()
+  public void resetNeighbors()
   {
-    distances.clear();
-    distances.put(id,0);
+    neighbors.clear();
   }
 
-  public Integer getDistanceToNode(Integer target, Rule rule)
+  public void addNeighbors(Set<Node> neighbors)
   {
-    Integer nextValue = rule.getNextValue(id, target);
-    if(nextValue != null)
-    {
-      Node nextNode = getNode(nextValue);
-      distances.put(target, 1 + nextNode.getDistanceToNode(target, rule));
-    } else
-      distances.put(target, -1);
-    return distances.get(target);
+    this.neighbors.addAll(neighbors);
+  }
+
+  public void addNeighbor(Node neighbor)
+  {
+    neighbors.add(neighbor);
+  }
+
+  public Set<Node> getNeighbors()
+  {
+    return Collections.unmodifiableSet(neighbors);
+  }
+
+  @Override
+  public boolean equals(Object o)
+  {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Node node = (Node) o;
+
+    if (id != null ? !id.equals(node.id) : node.id != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode()
+  {
+    return id != null ? id.hashCode() : 0;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "Node{" +
+         id +
+        '}';
   }
 }
