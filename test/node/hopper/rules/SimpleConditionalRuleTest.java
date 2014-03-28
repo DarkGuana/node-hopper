@@ -1,5 +1,6 @@
 package node.hopper.rules;
 
+import node.hopper.rules.simple.SimpleConditionalRule;
 import org.junit.Assert;
 import org.junit.Test;
 

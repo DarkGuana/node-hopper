@@ -1,4 +1,8 @@
-package node.hopper.rules;
+package node.hopper.rules.simple;
+
+import node.hopper.rules.Conditional;
+import node.hopper.rules.ConditionalRule;
+import node.hopper.rules.Rule;
 
 /**
  * Created by Dark Guana on 2014-03-22.

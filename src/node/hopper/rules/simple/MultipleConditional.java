@@ -1,4 +1,6 @@
-package node.hopper.rules;
+package node.hopper.rules.simple;
+
+import node.hopper.rules.Conditional;
 
 import java.util.Arrays;
 import java.util.List;

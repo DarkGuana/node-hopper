@@ -1,133 +1,21 @@
 package node.hopper.rules;
 
 /**
- * Created by Dark Guana on 2014-03-26.
+ * Created by Dark Guana on 2014-03-27.
  */
-public class RuleLibrary
+public interface RuleLibrary
 {
-  public static Conditional getLessThan()
-  {
-    return new Conditional()
-    {
-      @Override
-      public boolean isApplicable(Integer current, Integer target)
-      {
-        return current < target;
-      }
+  Conditional getLessThan();
 
-      @Override
-      public String getDescription()
-      {
-        return "val < target";
-      }
-    };
-  }
+  Conditional getMoreThan();
 
-  public static Conditional getMoreThan()
-  {
-    return new Conditional()
-    {
-      @Override
-      public boolean isApplicable(Integer current, Integer target)
-      {
-        return current > target;
-      }
+  Conditional getMoreThan(int check);
 
-      @Override
-      public String getDescription()
-      {
-        return "val > target";
-      }
-    };
-  }
+  Conditional getDividableBy(int div);
 
-  public static Conditional getMoreThan(final int check)
-  {
-    return new Conditional()
-    {
-      @Override
-      public boolean isApplicable(Integer current, Integer target)
-      {
-        return current > check;
-      }
+  Rule getMultiply(int mod);
 
-      @Override
-      public String getDescription()
-      {
-        return "val > " + check;
-      }
-    };
-  }
+  Rule getDivide(int mod);
 
-  public static Conditional getDividableBy(final int div)
-  {
-    return new Conditional()
-    {
-      @Override
-      public boolean isApplicable(Integer current, Integer target)
-      {
-        return current % div == 0;
-      }
-
-      @Override
-      public String getDescription()
-      {
-        return "val divisible by " + div;
-      }
-    };
-  }
-
-  public static Rule getMultiply(final int mod)
-  {
-    return new Rule()
-    {
-      @Override
-      public Integer getNextValue(Integer current, Integer target)
-      {
-        return current * mod;
-      }
-
-      @Override
-      public String getDescription()
-      {
-        return "val * " + mod;
-      }
-    };
-  }
-
-  public static Rule getDivide(final int mod)
-  {
-    return new Rule()
-    {
-      @Override
-      public Integer getNextValue(Integer current, Integer target)
-      {
-        return current / mod;
-      }
-
-      @Override
-      public String getDescription()
-      {
-        return "val / " + mod;
-      }
-    };
-  }
-
-  public static Rule getSubtract(final int mod)
-  {
-    return new Rule()
-    {
-      @Override
-      public Integer getNextValue(Integer current, Integer target)
-      {
-        return current - mod;
-      }
-
-      @Override
-      public String getDescription()
-      {
-        return "val - " + mod;
-      }
-    };
-  }
+  Rule getSubtract(int mod);
 }
