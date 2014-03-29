@@ -5,9 +5,15 @@ package node.hopper.rules;
  */
 public interface RuleLibrary
 {
-  Conditional getLessThan();
+  PrioritizedConditionalRule getNewPCRule();
 
-  Conditional getMoreThan();
+  ConditionalRule combine(Conditional conditional, Rule rule);
+
+  Conditional combine(Conditional... conditions);
+
+  Conditional getLessThanTarget();
+
+  Conditional getMoreThanTarget();
 
   Conditional getMoreThan(int check);
 

@@ -1,10 +1,8 @@
 package node.hopper.app;
 
 import node.hopper.graph.DistanceGraph;
+import node.hopper.rules.PrioritizedConditionalRule;
 import node.hopper.rules.RuleLibrary;
-import node.hopper.rules.simple.MultipleConditional;
-import node.hopper.rules.simple.PrioritizedConditionalRuleList;
-import node.hopper.rules.simple.SimpleConditionalRule;
 import node.hopper.rules.simple.SimpleRuleLibrary;
 
 import java.util.concurrent.TimeUnit;
@@ -26,10 +24,10 @@ public class TextApplication
     int width = 101;
     int length = 101;
 
-    PrioritizedConditionalRuleList rule = new PrioritizedConditionalRuleList();
-    rule.addNewConditional(new SimpleConditionalRule(library.getLessThan(), library.getMultiply(3)));
-    rule.addNewConditional(new SimpleConditionalRule(new MultipleConditional(library.getDividableBy(2), library.getMoreThan()), library.getDivide(2)));
-    rule.addNewConditional(new SimpleConditionalRule(library.getMoreThan(0), library.getSubtract(1)));
+    PrioritizedConditionalRule rule = library.getNewPCRule();
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(3)));
+    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(2), library.getMoreThanTarget()), library.getDivide(2)));
+    rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
     DistanceGraph dg = new DistanceGraph(width, length, rule);
     dg.populateAllDistances();
@@ -45,7 +43,7 @@ public class TextApplication
       reporter.append(y);
       for (int x = 0; x < width; x++)
       {
-        String displayValue = dg.getDistanceBetween(y,x).toString(); // dg.getDistanceBetween(y,x) < 0 ? "#" : " ";
+        String displayValue = dg.getDistanceBetween(y, x).toString(); // dg.getDistanceBetween(y,x) < 0 ? "#" : " ";
         reporter.append('\t').append(displayValue);
       }
       reporter.append('\n');
@@ -54,7 +52,7 @@ public class TextApplication
     System.out.println(reporter.toString());
   }
 
-  public static void main (String[] args)
+  public static void main(String[] args)
   {
     TextApplication app = new TextApplication();
     long start = System.currentTimeMillis();

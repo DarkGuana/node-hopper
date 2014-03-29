@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Dark Guana on 2014-03-22.
  */
-public class PrioritizedConditionalRuleList implements ConditionalRule
+public class PrioritizedConditionalRuleList implements node.hopper.rules.PrioritizedConditionalRule
 {
   private List<ConditionalRule> rules;
 
@@ -17,6 +17,7 @@ public class PrioritizedConditionalRuleList implements ConditionalRule
     rules = new ArrayList<ConditionalRule>(0);
   }
 
+  @Override
   public void addNewConditional(ConditionalRule rule)
   {
     rules.add(rule);

@@ -1,8 +1,6 @@
 package node.hopper.rules.simple;
 
-import node.hopper.rules.Conditional;
-import node.hopper.rules.Rule;
-import node.hopper.rules.RuleLibrary;
+import node.hopper.rules.*;
 
 /**
  * Created by Dark Guana on 2014-03-26.
@@ -10,7 +8,25 @@ import node.hopper.rules.RuleLibrary;
 public class SimpleRuleLibrary implements RuleLibrary
 {
   @Override
-  public Conditional getLessThan()
+  public PrioritizedConditionalRule getNewPCRule()
+  {
+    return new PrioritizedConditionalRuleList();
+  }
+
+  @Override
+  public ConditionalRule combine(Conditional conditional, Rule rule)
+  {
+    return new SimpleConditionalRule(conditional, rule);
+  }
+
+  @Override
+  public Conditional combine(Conditional... conditions)
+  {
+    return new MultipleConditional(conditions);
+  }
+
+  @Override
+  public Conditional getLessThanTarget()
   {
     return new Conditional()
     {
@@ -29,7 +45,7 @@ public class SimpleRuleLibrary implements RuleLibrary
   }
 
   @Override
-  public Conditional getMoreThan()
+  public Conditional getMoreThanTarget()
   {
     return new Conditional()
     {

@@ -16,9 +16,9 @@ public class Algorithm
   public static void main(String[] args)
   {
 //    PrioritizedConditionalRuleList rule = new PrioritizedConditionalRuleList();
-//    rule.addNewConditional(new SimpleConditionalRule(SimpleRuleLibrary.getLessThan(), SimpleRuleLibrary.getMultiply(10)));
-//    rule.addNewConditional(new SimpleConditionalRule(new MultipleConditional(SimpleRuleLibrary.getDividableBy(2), SimpleRuleLibrary.getMoreThan()), SimpleRuleLibrary.getDivide(2)));
-//    rule.addNewConditional(new SimpleConditionalRule(SimpleRuleLibrary.getMoreThan(0), SimpleRuleLibrary.getSubtract(1)));
+//    rule.addNewConditional(new SimpleConditionalRule(SimpleRuleLibrary.getLessThanTarget(), SimpleRuleLibrary.getMultiply(10)));
+//    rule.addNewConditional(new SimpleConditionalRule(new MultipleConditional(SimpleRuleLibrary.getDividableBy(2), SimpleRuleLibrary.getMoreThanTarget()), SimpleRuleLibrary.getDivide(2)));
+//    rule.addNewConditional(new SimpleConditionalRule(SimpleRuleLibrary.getMoreThanTarget(0), SimpleRuleLibrary.getSubtract(1)));
 //
 //    Integer current = 3;
 //    Integer target = 90;
