@@ -21,8 +21,8 @@ public class TextApplication
 
   public void run()
   {
-    int width = 101;
-    int length = 101;
+    int width = 11;
+    int length = 11;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
     rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(3)));

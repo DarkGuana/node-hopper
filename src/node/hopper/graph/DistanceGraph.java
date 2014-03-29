@@ -2,19 +2,21 @@ package node.hopper.graph;
 
 import node.hopper.node.Node;
 import node.hopper.node.NodePair;
-import node.hopper.rules.*;
+import node.hopper.rules.Rule;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created by Dark Guana on 2014-03-25.
  */
 public class DistanceGraph
 {
-  private static final Integer NON_TERMINATING = new Integer(-1);
+  private static Logger logger = Logger.getLogger("DistanceGraph");
+  private static final Integer NON_TERMINATING = -1;
 
   private final Map<Integer, Node> nodeMap = new HashMap<Integer, Node>();
   private Map<NodePair, Integer> distances = new HashMap<NodePair, Integer>();
@@ -53,7 +55,7 @@ public class DistanceGraph
     Integer current = start.getId();
     Integer target = finish.getId();
 
-    System.out.println("Figuring "+current +" -> "+target+"...");
+    logger.finest("Figuring " + current + " -> " + target + "...");
 
     Set<Integer> history = new HashSet<Integer>();
     for (int i = 0; i < depth && current != null; i++)
@@ -68,24 +70,24 @@ public class DistanceGraph
       if (!current.equals(target) && (history.contains(next) || (distanceCheck != null && distanceCheck.equals(NON_TERMINATING))))
       {
         setDistance(start, finish, NON_TERMINATING);
-        System.out.println("Loop detected / depth exceeded");
+        logger.finest("Loop detected / depth exceeded");
         break;
       } else if (distanceCheck != null)
       {
         setDistance(start, finish, i + distanceCheck);
-        System.out.println("Previous target found (" + current + " -> " + target + ", " + distanceCheck + ") + " + i);
+        logger.finest("Previous target found (" + current + " -> " + target + ", " + distanceCheck + ") + " + i);
         break;
       } else
       {
         setDistance(start, currentNode, i);
-        System.out.println("Setting (" + start.getId() + " -> " + currentNode.getId() + ") to " + i);
+        logger.finest("Setting (" + start.getId() + " -> " + currentNode.getId() + ") to " + i);
       }
 
-      System.out.println(current + " -> " + next);
+      logger.finest(current + " -> " + next);
       history.add(current);
       current = next;
     }
-    System.out.println("done");
+    logger.finest("done");
     return getDistance(start, finish);
   }
 
@@ -97,7 +99,10 @@ public class DistanceGraph
   public Integer getDistanceBetween(Integer start, Integer finish)
   {
     if (start > length || finish > width)
+    {
+      logger.warning("Invalid request, out of range (from: " + start + " to: " + finish);
       throw new IndexOutOfBoundsException("Unable to find value for " + start + " -> " + finish);
+    }
     return getDistance(getNode(start), getNode(finish));
   }
 
