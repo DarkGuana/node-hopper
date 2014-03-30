@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 /**
  * Created by Dark Guana on 2014-03-25.
  */
-public class DistanceGraph
+public class DistanceGraph implements RectangularIntegerAggregation
 {
   private static Logger logger = Logger.getLogger("DistanceGraph");
   private static final Integer NON_TERMINATING = -1;
@@ -126,5 +126,23 @@ public class DistanceGraph
   private void resetDistances()
   {
     distances.clear();
+  }
+
+  @Override
+  public Integer getWidth()
+  {
+    return width;
+  }
+
+  @Override
+  public Integer getLength()
+  {
+    return length;
+  }
+
+  @Override
+  public Integer getValueAt(Integer x, Integer y)
+  {
+    return getDistanceBetween(y, x);
   }
 }
