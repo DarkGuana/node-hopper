@@ -43,8 +43,8 @@ public class SwingApplication extends JFrame
     int length = 501;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
-    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(31)));
-    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(10), library.getMoreThanTarget()), library.getDivide(10)));
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(255)));
+    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(113), library.getMoreThanTarget()), library.getDivide(113)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
     DistanceGraph dg = new DistanceGraph(width, length, rule);
