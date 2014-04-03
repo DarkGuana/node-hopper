@@ -3,6 +3,7 @@ package node.hopper.app;
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.RectangularIntegerAggregation;
 import node.hopper.graph.viewer.swing.RectangularIntegerAggregatePanel;
+import node.hopper.graph.viewer.swing.RectangularIntegerAggregateStatusPanel;
 import node.hopper.rules.PrioritizedConditionalRule;
 import node.hopper.rules.RuleLibrary;
 import node.hopper.rules.simple.SimpleRuleLibrary;
@@ -16,20 +17,27 @@ import java.awt.*;
 public class SwingApplication extends JFrame
 {
   private final RuleLibrary library;
-  private RectangularIntegerAggregatePanel reporter = new RectangularIntegerAggregatePanel();
+  private RectangularIntegerAggregatePanel reporter;
   private RectangularIntegerAggregation display;
+  private Component reporterStatus;
 
-  public SwingApplication()
+  public SwingApplication(RuleLibrary library)
   {
     super("NodeHopper");
-    this.library = new SimpleRuleLibrary();
-    getContentPane().add(reporter, BorderLayout.CENTER);
+    this.library = library;
+    buildLayout();
+  }
+
+  private void buildLayout()
+  {
+    getContentPane().add(getReporter(), BorderLayout.CENTER);
+    getContentPane().add(getReporterStatus(), BorderLayout.EAST);
   }
 
   public void setDisplay(RectangularIntegerAggregation display)
   {
     this.display = display;
-    reporter.setDataSource(display);
+    getReporter().setDataSource(display);
   }
 
   public RectangularIntegerAggregation getDisplay()
@@ -53,7 +61,7 @@ public class SwingApplication extends JFrame
 
   public static void main(String[] args)
   {
-    SwingApplication app = new SwingApplication();
+    SwingApplication app = new SwingApplication(new SimpleRuleLibrary());
     app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     DistanceGraph graph = getTestSystem(app.library);
@@ -63,5 +71,19 @@ public class SwingApplication extends JFrame
     app.setVisible(true);
 
     graph.populateAllDistances();
+  }
+
+  private RectangularIntegerAggregatePanel getReporter()
+  {
+    if (reporter == null)
+      reporter = new RectangularIntegerAggregatePanel();
+    return reporter;
+  }
+
+  private Component getReporterStatus()
+  {
+    if(reporterStatus == null)
+      reporterStatus = new RectangularIntegerAggregateStatusPanel();
+    return reporterStatus;
   }
 }

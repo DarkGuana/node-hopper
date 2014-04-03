@@ -18,12 +18,6 @@ public class IntegerColorConverter
 
   private Map<Integer, Color> usedColors = new HashMap<Integer, Color>();
 
-  int redMax = (int) (127*(1+Math.sin(0/(100*Math.PI))));
-  int redMin = (int) (127*(1+Math.sin(0/(100*Math.PI))));
-
-  int blueMax = (int) (127*(1+Math.cos(0/(100*Math.PI))));
-  int blueMin = (int) (127*(1+Math.cos(0/(100*Math.PI))));
-
   public Color getColor(Integer val)
   {
     if(val == null)
@@ -36,14 +30,9 @@ public class IntegerColorConverter
     {
       int red = (int) (127*(1+Math.sin(val/(50*Math.PI))));
       int blue = (int) (127*(1+Math.cos(val/(50*Math.PI))));
-      redMax = Math.max(redMax, red);
-      redMin = Math.min(redMin, red);
-      blueMax = Math.max(blueMax, blue);
-      blueMin = Math.min(blueMin, blue);
       Color fresh = new Color(red,0,blue);
       usedColors.put(val, fresh);
       used = fresh;
-//      System.out.println("red = " + redMin + " - "+redMax +"   blue = "+blueMin + " - "+blueMax);
     }
     return used;
   }
