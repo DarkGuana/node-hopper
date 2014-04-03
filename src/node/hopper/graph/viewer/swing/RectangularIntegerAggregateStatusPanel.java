@@ -1,13 +1,18 @@
 package node.hopper.graph.viewer.swing;
 
+import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.ViewerListener;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by Dark Guana on 2014-04-02.
  */
-public class RectangularIntegerAggregateStatusPanel extends JPanel
+public class RectangularIntegerAggregateStatusPanel extends JPanel implements ViewerListener
 {
+  private IntegerColorConverter colorConverter;
+
   private JPanel startNodePanel;
   private JLabel startNodeLabel;
   private JLabel startNodeValueLabel;
@@ -24,9 +29,10 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel
   private JList reportHopList;
   private Component reportScale;
 
-  public RectangularIntegerAggregateStatusPanel()
+  public RectangularIntegerAggregateStatusPanel(IntegerColorConverter colorConverter)
   {
     super();
+    this.colorConverter = colorConverter;
     buildLayout();
   }
 
@@ -143,7 +149,34 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel
   private Component getReportScale()
   {
     if (reportScale == null)
-      reportScale = new JLabel("PlaceHolder");
+      reportScale = new IntegerColorConversionScale(colorConverter);
     return reportScale;
+  }
+
+  @Override
+  public void setStartNode(Integer startNode)
+  {
+    if(startNode != null)
+      getStartNodeValueLabel().setText(startNode.toString());
+    else
+      getStartNodeValueLabel().setText("Not set");
+  }
+
+  @Override
+  public void setFinalNode(Integer finalNode)
+  {
+    if(finalNode != null)
+      getFinalNodeValueLabel().setText(finalNode.toString());
+    else
+      getFinalNodeValueLabel().setText("Not set");
+  }
+
+  @Override
+  public void setHopCount(Integer count)
+  {
+    if(count != null)
+      getHopCountValueLabel().setText(count.toString());
+    else
+      getHopCountValueLabel().setText("Not set");
   }
 }

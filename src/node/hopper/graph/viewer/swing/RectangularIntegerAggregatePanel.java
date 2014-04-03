@@ -2,29 +2,56 @@ package node.hopper.graph.viewer.swing;
 
 import node.hopper.graph.RectangularIntegerAggregation;
 import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.Viewer;
+import node.hopper.graph.viewer.ViewerListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dark Guana on 2014-03-29.
  */
-public class RectangularIntegerAggregatePanel extends JPanel
+public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
 {
-  private IntegerColorConverter converter = new IntegerColorConverter();
-
   private RectangularIntegerAggregation dataSource;
   private Image buffer;
-  private Boolean currentRenderComplete = true;
-  private IntegerColorConverter colorPicker = new IntegerColorConverter();
+  private IntegerColorConverter colorPicker;
   private Timer repaintTimer = null;
+  private final List<ViewerListener> listeners = new ArrayList<ViewerListener>(0);
 
-  public RectangularIntegerAggregatePanel()
+  public RectangularIntegerAggregatePanel(IntegerColorConverter converter)
   {
+    this.colorPicker = converter;
+    addMouseMotionListener(new MouseMotionListener()
+    {
+      @Override
+      public void mouseDragged(MouseEvent e)
+      {
+        // do nothing
+      }
+
+      @Override
+      public void mouseMoved(MouseEvent e)
+      {
+        if(dataSource != null)
+        {
+          for (ViewerListener listener:listeners)
+          {
+            listener.setStartNode(e.getY());
+            listener.setFinalNode(e.getX());
+            listener.setHopCount(dataSource.getValueAt(e.getY(), e.getX()));
+          }
+        }
+      }
+    });
   }
 
   @Override
@@ -105,5 +132,17 @@ public class RectangularIntegerAggregatePanel extends JPanel
   {
     repaintTimer.stop();
     repaintTimer = null;
+  }
+
+  @Override
+  public void addListener(ViewerListener listener)
+  {
+    listeners.add(listener);
+  }
+
+  @Override
+  public void removeListener(ViewerListener listener)
+  {
+    listeners.remove(listener);
   }
 }
