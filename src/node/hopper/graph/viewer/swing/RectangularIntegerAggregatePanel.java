@@ -41,13 +41,15 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
       @Override
       public void mouseMoved(MouseEvent e)
       {
-        if(dataSource != null)
+        Integer start = Math.min(e.getY(), dataSource.getLength());
+        Integer end = Math.min(e.getX(), dataSource.getWidth());
+        if (dataSource != null)
         {
-          for (ViewerListener listener:listeners)
+          for (ViewerListener listener : listeners)
           {
-            listener.setStartNode(e.getY());
-            listener.setFinalNode(e.getX());
-            listener.setHopCount(dataSource.getValueAt(e.getY(), e.getX()));
+            listener.setStartNode(start);
+            listener.setFinalNode(end);
+            listener.setHopCount(dataSource.getValueAt(start, end));
           }
         }
       }
@@ -107,7 +109,7 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
     else if (repaintTimer != null)
     {
       int delay = (int) (endUpdate - startUpdate);
-      repaintTimer.setDelay(delay*8);
+      repaintTimer.setDelay(delay * 8);
     }
   }
 

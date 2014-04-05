@@ -35,7 +35,8 @@ public class SwingApplication extends JFrame
 
   private void buildLayout()
   {
-    getContentPane().add(getReporter(), BorderLayout.CENTER);
+    JScrollPane scrollPane = new JScrollPane(getReporter());
+    getContentPane().add(scrollPane, BorderLayout.CENTER);
     getContentPane().add(getReporterStatus(), BorderLayout.EAST);
   }
 
