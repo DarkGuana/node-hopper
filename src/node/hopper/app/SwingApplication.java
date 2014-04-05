@@ -2,6 +2,7 @@ package node.hopper.app;
 
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.RectangularIntegerAggregation;
+import node.hopper.graph.viewer.IntegerColorConverter;
 import node.hopper.graph.viewer.swing.RectangularIntegerAggregatePanel;
 import node.hopper.graph.viewer.swing.RectangularIntegerAggregateStatusPanel;
 import node.hopper.rules.PrioritizedConditionalRule;
@@ -19,13 +20,17 @@ public class SwingApplication extends JFrame
   private final RuleLibrary library;
   private RectangularIntegerAggregatePanel reporter;
   private RectangularIntegerAggregation display;
-  private Component reporterStatus;
+  private RectangularIntegerAggregateStatusPanel reporterStatus;
+  private IntegerColorConverter colorConverter = new IntegerColorConverter();
 
   public SwingApplication(RuleLibrary library)
   {
     super("NodeHopper");
     this.library = library;
+
     buildLayout();
+
+    getReporter().addListener(getReporterStatus());
   }
 
   private void buildLayout()
@@ -71,19 +76,20 @@ public class SwingApplication extends JFrame
     app.setVisible(true);
 
     graph.populateAllDistances();
+    app.pack();
   }
 
   private RectangularIntegerAggregatePanel getReporter()
   {
     if (reporter == null)
-      reporter = new RectangularIntegerAggregatePanel();
+      reporter = new RectangularIntegerAggregatePanel(colorConverter);
     return reporter;
   }
 
-  private Component getReporterStatus()
+  private RectangularIntegerAggregateStatusPanel getReporterStatus()
   {
     if(reporterStatus == null)
-      reporterStatus = new RectangularIntegerAggregateStatusPanel();
+      reporterStatus = new RectangularIntegerAggregateStatusPanel(colorConverter);
     return reporterStatus;
   }
 }

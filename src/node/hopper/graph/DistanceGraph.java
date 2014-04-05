@@ -23,7 +23,7 @@ public class DistanceGraph implements RectangularIntegerAggregation
 
   private Integer width = 0;
   private Integer length = 0;
-  private Integer depth = 1000;
+  private Integer depth = 100000;
   private Rule rule;
 
   public DistanceGraph(int width, int length, Rule rule)
