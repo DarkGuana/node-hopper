@@ -47,6 +47,7 @@ public class DistanceGraph implements RectangularIntegerAggregation
       {
         populateDistanceBetween(getNode(y), getNode(x));
       }
+      logger.fine("Paths ending at " + x + " done");
     }
   }
 
@@ -55,7 +56,7 @@ public class DistanceGraph implements RectangularIntegerAggregation
     Integer current = start.getId();
     Integer target = finish.getId();
 
-    logger.finest("Figuring " + current + " -> " + target + "...");
+    logger.finer("Figuring " + current + " -> " + target + "...");
 
     Set<Integer> history = new HashSet<Integer>();
     for (int i = 0; i < depth && current != null; i++)

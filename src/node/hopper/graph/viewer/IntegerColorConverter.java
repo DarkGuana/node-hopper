@@ -21,20 +21,20 @@ public class IntegerColorConverter
 
   public Color getColor(Integer val)
   {
-    if(val == null)
+    if (val == null)
       return unevaluated;
-    if(nonTerminatingMarker.equals(val))
+    if (nonTerminatingMarker.equals(val))
       return nonTerminating;
 
     Color used = usedColors.get(val);
-    if(used == null)
+    if (used == null)
     {
-      int red   = (int) (127*(1+Math.sin(val/(50*Math.PI))));
-      int green = (int) (127*(1+Math.sin(Math.PI/2 + val/(50*Math.PI))));
-      int blue  = (int) (127*(1+Math.sin(Math.PI   +val/(50*Math.PI))));
-      Color fresh = new Color(red,green,blue);
+      int red = (int) (127 * (1 + Math.sin(val / (50 * Math.PI))));
+      int green = (int) (127 * (1 + Math.sin(Math.PI / 2 + val / (50 * Math.PI))));
+      int blue = (int) (127 * (1 + Math.sin(Math.PI + val / (50 * Math.PI))));
+      Color fresh = new Color(red, green, blue);
       usedColors.put(val, fresh);
-      if(val>maxValue)
+      if (val > maxValue)
         maxValue = val;
       used = fresh;
     }

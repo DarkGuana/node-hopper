@@ -156,7 +156,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   @Override
   public void setStartNode(Integer startNode)
   {
-    if(startNode != null)
+    if (startNode != null)
       getStartNodeValueLabel().setText(startNode.toString());
     else
       getStartNodeValueLabel().setText("Not set");
@@ -165,7 +165,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   @Override
   public void setFinalNode(Integer finalNode)
   {
-    if(finalNode != null)
+    if (finalNode != null)
       getFinalNodeValueLabel().setText(finalNode.toString());
     else
       getFinalNodeValueLabel().setText("Not set");
@@ -174,7 +174,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   @Override
   public void setHopCount(Integer count)
   {
-    if(count != null)
+    if (count != null)
       getHopCountValueLabel().setText(count.toString());
     else
       getHopCountValueLabel().setText("Not set");

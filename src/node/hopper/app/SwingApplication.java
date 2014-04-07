@@ -53,8 +53,8 @@ public class SwingApplication extends JFrame
 
   private static DistanceGraph getTestSystem(RuleLibrary library)
   {
-    int width = 501;
-    int length = 501;
+    int width = 3000;
+    int length = 3000;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
     rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(255)));
@@ -89,7 +89,7 @@ public class SwingApplication extends JFrame
 
   private RectangularIntegerAggregateStatusPanel getReporterStatus()
   {
-    if(reporterStatus == null)
+    if (reporterStatus == null)
       reporterStatus = new RectangularIntegerAggregateStatusPanel(colorConverter);
     return reporterStatus;
   }
