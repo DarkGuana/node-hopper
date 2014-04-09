@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 /**
  * Created by Dark Guana on 2014-03-25.
  */
-public class DistanceGraph implements RectangularIntegerAggregation
+public class DistanceGraph implements IntegerAggregation
 {
   private static Logger logger = Logger.getLogger("DistanceGraph");
   private static final Integer NON_TERMINATING = -1;
@@ -25,6 +25,8 @@ public class DistanceGraph implements RectangularIntegerAggregation
   private Integer length = 0;
   private Integer depth = 100000;
   private Rule rule;
+
+  private final HashSet<IntegerAggregateListener> listeners = new HashSet<IntegerAggregateListener>();
 
   public DistanceGraph(int width, int length, Rule rule)
   {
@@ -130,20 +132,32 @@ public class DistanceGraph implements RectangularIntegerAggregation
   }
 
   @Override
-  public Integer getWidth()
+  public Integer getMaxTargetNode()
   {
     return width;
   }
 
   @Override
-  public Integer getLength()
+  public Integer getMaxStartNode()
   {
     return length;
   }
 
   @Override
-  public Integer getValueAt(Integer x, Integer y)
+  public Integer getAggregate(Integer x, Integer y)
   {
     return getDistanceBetween(y, x);
+  }
+
+  @Override
+  public void addListener(IntegerAggregateListener listener)
+  {
+    listeners.add(listener);
+  }
+
+  @Override
+  public void removeListener(IntegerAggregateListener listener)
+  {
+    listeners.remove(listener);
   }
 }
