@@ -53,6 +53,6 @@ public class SimpleConditionalRuleTest
     Assert.assertTrue("9 > 3", cRule.isApplicable(9, 3));
     Assert.assertTrue("1 > 0", cRule.isApplicable(1, 0));
 
-    Assert.assertEquals("Operation failed", cRule.getNextValue(4,2), Integer.valueOf(8));
+    Assert.assertEquals("Operation failed", cRule.getNextValue(4, 2), Integer.valueOf(8));
   }
 }

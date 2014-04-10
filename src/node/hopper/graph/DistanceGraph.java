@@ -20,6 +20,7 @@ public class DistanceGraph implements IntegerAggregation
 
   private final Map<Integer, Node> nodeMap = new HashMap<Integer, Node>();
   private Map<NodePair, Integer> distances = new HashMap<NodePair, Integer>();
+  private boolean active = false;
 
   private Integer width = 0;
   private Integer length = 0;
@@ -43,6 +44,7 @@ public class DistanceGraph implements IntegerAggregation
 
   public void populateAllDistances()
   {
+    setActive(true);
     for (int x = 0; x < width; x++)
     {
       for (int y = 0; y < length; y++)
@@ -51,6 +53,7 @@ public class DistanceGraph implements IntegerAggregation
       }
       logger.fine("Paths ending at " + x + " done");
     }
+    setActive(false);
   }
 
   private Integer populateDistanceBetween(Node start, Node finish)
@@ -111,6 +114,8 @@ public class DistanceGraph implements IntegerAggregation
 
   private Integer setDistance(Node start, Node finish, Integer distance)
   {
+    for (IntegerAggregateListener listener : listeners)
+      listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
     return distances.put(NodePair.get(start, finish), distance);
   }
 
@@ -150,6 +155,12 @@ public class DistanceGraph implements IntegerAggregation
   }
 
   @Override
+  public boolean isActive()
+  {
+    return active;
+  }
+
+  @Override
   public void addListener(IntegerAggregateListener listener)
   {
     listeners.add(listener);
@@ -159,5 +170,12 @@ public class DistanceGraph implements IntegerAggregation
   public void removeListener(IntegerAggregateListener listener)
   {
     listeners.remove(listener);
+  }
+
+  public void setActive(boolean active)
+  {
+    this.active = active;
+    for (IntegerAggregateListener listener : listeners)
+      listener.activityChanged(active, this);
   }
 }

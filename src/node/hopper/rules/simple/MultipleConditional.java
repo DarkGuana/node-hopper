@@ -22,7 +22,7 @@ public class MultipleConditional implements Conditional
   {
     for (Conditional condition : conditions)
     {
-      if(!condition.isApplicable(current, target))
+      if (!condition.isApplicable(current, target))
         return false;
     }
     return true;
@@ -37,7 +37,7 @@ public class MultipleConditional implements Conditional
       description.append(condition.getDescription()).append(" and ");
     }
     //trim last and
-    description.setLength(description.length()-4);
+    description.setLength(description.length() - 4);
     return description.toString();
   }
 

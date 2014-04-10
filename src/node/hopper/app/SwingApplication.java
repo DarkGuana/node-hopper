@@ -3,8 +3,8 @@ package node.hopper.app;
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.viewer.IntegerColorConverter;
-import node.hopper.graph.viewer.swing.IntegerAggregateStatusPanel;
 import node.hopper.graph.viewer.swing.IntegerAggregatePanel;
+import node.hopper.graph.viewer.swing.IntegerAggregateStatusPanel;
 import node.hopper.rules.PrioritizedConditionalRule;
 import node.hopper.rules.RuleLibrary;
 import node.hopper.rules.simple.SimpleRuleLibrary;
@@ -54,8 +54,8 @@ public class SwingApplication extends JFrame
 
   private static DistanceGraph getTestSystem(RuleLibrary library)
   {
-    int width = 3000;
-    int length = 3000;
+    int width = 500;
+    int length = 500;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
     rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(100)));
