@@ -22,17 +22,17 @@ public class DistanceGraph implements IntegerAggregation
   private Map<NodePair, Integer> distances = new HashMap<NodePair, Integer>();
   private boolean active = false;
 
-  private Integer width = 0;
-  private Integer length = 0;
+  private Integer maxTarget = 0;
+  private Integer maxStart = 0;
   private Integer depth = 100000;
   private Rule rule;
 
   private final HashSet<IntegerAggregateListener> listeners = new HashSet<IntegerAggregateListener>();
 
-  public DistanceGraph(int width, int length, Rule rule)
+  public DistanceGraph(int maxTarget, int maxStart, Rule rule)
   {
     setRule(rule);
-    setSize(width, length);
+    setSize(maxTarget, maxStart);
   }
 
   public Node getNode(Integer id)
@@ -45,11 +45,11 @@ public class DistanceGraph implements IntegerAggregation
   public void populateAllDistances()
   {
     setActive(true);
-    for (int x = 0; x < width; x++)
+    for (int x = 0; x < maxTarget; x++)
     {
-      for (int y = 0; y < length; y++)
+      for (int y = 0; y < maxStart; y++)
       {
-        populateDistanceBetween(getNode(y), getNode(x));
+        populateDistanceBetween(getNode(x), getNode(y));
       }
       logger.fine("Paths ending at " + x + " done");
     }
@@ -104,7 +104,7 @@ public class DistanceGraph implements IntegerAggregation
 
   public Integer getDistanceBetween(Integer start, Integer finish)
   {
-    if (start > length || finish > width)
+    if (start > maxStart || finish > maxTarget)
     {
       logger.warning("Invalid request, out of range (from: " + start + " to: " + finish);
       throw new IndexOutOfBoundsException("Unable to find value for " + start + " -> " + finish);
@@ -121,8 +121,8 @@ public class DistanceGraph implements IntegerAggregation
 
   private void setSize(int width, int length)
   {
-    this.width = width;
-    this.length = length;
+    this.maxTarget = width;
+    this.maxStart = length;
   }
 
   public void setRule(Rule rule)
@@ -139,19 +139,19 @@ public class DistanceGraph implements IntegerAggregation
   @Override
   public Integer getMaxTargetNode()
   {
-    return width;
+    return maxTarget;
   }
 
   @Override
   public Integer getMaxStartNode()
   {
-    return length;
+    return maxStart;
   }
 
   @Override
-  public Integer getAggregate(Integer x, Integer y)
+  public Integer getAggregate(Integer start, Integer target)
   {
-    return getDistanceBetween(y, x);
+    return getDistanceBetween(start, target);
   }
 
   @Override

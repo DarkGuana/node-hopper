@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Created by Dark Guana on 2014-03-29.
+ * TODO: Comment this
  */
 public class SwingApplication extends JFrame
 {
@@ -62,8 +62,7 @@ public class SwingApplication extends JFrame
     rule.addNewConditional(library.combine(library.combine(library.getDividableBy(99), library.getMoreThanTarget()), library.getDivide(99)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
-    DistanceGraph dg = new DistanceGraph(width, length, rule);
-    return dg;
+    return new DistanceGraph(width, length, rule);
   }
 
   public static void main(String[] args)
@@ -91,7 +90,10 @@ public class SwingApplication extends JFrame
   private IntegerAggregateStatusPanel getReporterStatus()
   {
     if (reporterStatus == null)
-      reporterStatus = new IntegerAggregateStatusPanel(colorConverter);
+    {
+      reporterStatus = new IntegerAggregateStatusPanel();
+      reporterStatus.setColorConverter(colorConverter);
+    }
     return reporterStatus;
   }
 }

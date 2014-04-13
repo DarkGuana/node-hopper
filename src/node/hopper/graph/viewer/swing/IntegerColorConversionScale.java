@@ -14,6 +14,8 @@ import java.awt.*;
  */
 public class IntegerColorConversionScale extends JPanel
 {
+  private static final Color DEFAULT_COLOR = Color.GRAY;
+
   public static final Integer DEFAULT_VERTICAL_GAP = 5;
   public static final Integer DEFAULT_HORIZONTAL_GAP = 5;
   public static final Integer DEFAULT_BAR_WIDTH = 15;
@@ -28,10 +30,15 @@ public class IntegerColorConversionScale extends JPanel
 
   private IntegerColorConverter converter;
 
-  public IntegerColorConversionScale(IntegerColorConverter converter)
+  public IntegerColorConversionScale()
+  {
+    setPreferredSize(new Dimension(150, 400));
+  }
+
+  public void setConverter(IntegerColorConverter converter)
   {
     this.converter = converter;
-    setPreferredSize(new Dimension(150, 400));
+    repaint();
   }
 
   @Override
@@ -46,6 +53,10 @@ public class IntegerColorConversionScale extends JPanel
     int barX = horizontalGap;
     int tickX = horizontalGap + barWidth + tickWidth;
 
+    Integer maxValue = 0;
+    if(converter != null)
+      maxValue = converter.getMaxValue();
+
     // Draw the vertical line of the bar
     g.drawLine(barX, topY, barX, bottomY);
 
@@ -54,9 +65,12 @@ public class IntegerColorConversionScale extends JPanel
     for (int i = 0; i < bottomY - topY; i++)
     {
       float ratio = (i / (float) (bottomY - topY));
-      Integer value = (int) (ratio * converter.getMaxValue());
+      Integer value = (int) (ratio * maxValue);
       // Color block
-      g.setColor(converter.getColor(value));
+      Color color = DEFAULT_COLOR;
+      if(converter != null)
+        color = converter.getColor(value);
+      g.setColor(color);
       int height = bottomY - i;
       g.drawLine(barX, height, barWidth, height);
     }
@@ -67,7 +81,7 @@ public class IntegerColorConversionScale extends JPanel
     {
       float ratio = (i / (float) tickCount);
       int y = bottomY - (int) (ratio * (bottomY - topY));
-      Integer value = (int) (ratio * converter.getMaxValue());
+      Integer value = (int) (ratio * maxValue);
 
       // Ticks
       g.drawLine(barX, y, tickX, y);

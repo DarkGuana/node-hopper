@@ -12,7 +12,6 @@ import java.awt.*;
  */
 public class IntegerAggregateStatusPanel extends JPanel implements AggregatePositionListener
 {
-  private IntegerColorConverter colorConverter;
   private IntegerAggregation dataSource;
 
   private JPanel startNodePanel;
@@ -29,13 +28,17 @@ public class IntegerAggregateStatusPanel extends JPanel implements AggregatePosi
 
   private JSplitPane reportPane;
   private JList reportHopList;
-  private Component reportScale;
+  private IntegerColorConversionScale reportScale;
 
-  public IntegerAggregateStatusPanel(IntegerColorConverter colorConverter)  // TODO: add set method for colorConverter
+  public IntegerAggregateStatusPanel()
   {
     super();
-    this.colorConverter = colorConverter;
     buildLayout();
+  }
+
+  public void setColorConverter(IntegerColorConverter colorConverter)
+  {
+    getReportScale().setConverter(colorConverter);
   }
 
   public void setDataSource(IntegerAggregation dataSource)
@@ -153,10 +156,10 @@ public class IntegerAggregateStatusPanel extends JPanel implements AggregatePosi
     return reportHopList;
   }
 
-  private Component getReportScale()
+  private IntegerColorConversionScale getReportScale()
   {
     if (reportScale == null)
-      reportScale = new IntegerColorConversionScale(colorConverter);
+      reportScale = new IntegerColorConversionScale();
     return reportScale;
   }
 

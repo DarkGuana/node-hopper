@@ -141,10 +141,11 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
   @Override
   public void aggregateChanged(Integer start, Integer target, Integer aggregateValue, IntegerAggregation source)
   {
-    // TODO: Profile this to make sure it's performant
+    // Tragically, the non-performant part of this method appears to be the drawLine call,
+    // re-getting the graphics item is negligible in comparison.
     Graphics g = buffer.getGraphics();
     g.setColor(colorPicker.getColor(aggregateValue));
-    g.drawLine(start, target, start, target);
+    g.drawLine(target, start, target, start);
     g.dispose();
   }
 
