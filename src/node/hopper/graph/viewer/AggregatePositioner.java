@@ -1,7 +1,10 @@
 package node.hopper.graph.viewer;
 
 /**
- * TODO (clm): DOCUMENT ME!!!
+ * When you need a class to be able to report to other classes what value pair is currently being examined, this
+ * interface (and a bit more behind the scenes code to alert the given listeners) is your friend.
+ *
+ * Or at least not your enemy.  Probably.
  */
 public interface AggregatePositioner
 {

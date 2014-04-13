@@ -6,7 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * TODO (clm): DOCUMENT ME!!!
+ * This swing class is used to show the state of the given color converter.  Essentially it's just a colored bar
+ * with indicator ticks down its length to show what colors correspond to what values.
+ *
+ * TODO: add a listener system to this and the color converter to update this as values change, rather than just
+ * on repaints.
  */
 public class IntegerColorConversionScale extends JPanel
 {
@@ -27,7 +31,7 @@ public class IntegerColorConversionScale extends JPanel
   public IntegerColorConversionScale(IntegerColorConverter converter)
   {
     this.converter = converter;
-    setPreferredSize(new Dimension(200, 400));
+    setPreferredSize(new Dimension(150, 400));
   }
 
   @Override
