@@ -52,6 +52,8 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
     int barX = horizontalGap;
     int tickX = horizontalGap + barWidth + tickWidth;
 
+    int textHeight = g.getFontMetrics().getHeight();
+
     Integer maxValue = 0;
     if(converter != null)
       maxValue = converter.getMaxValue();
@@ -80,13 +82,14 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
     {
       float ratio = (i / (float) tickCount);
       int y = bottomY - (int) (ratio * (bottomY - topY));
+      int textMod = (int) (ratio * textHeight)/2;
       Integer value = (int) (ratio * maxValue);
 
       // Ticks
       g.drawLine(barX, y, tickX, y);
 
       // Labels
-      g.drawString(value.toString(), tickX, y);
+      g.drawString(value.toString(), tickX + horizontalGap, y + textMod);
     }
 
     g.dispose();
