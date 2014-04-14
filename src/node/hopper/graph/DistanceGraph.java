@@ -49,7 +49,7 @@ public class DistanceGraph implements IntegerAggregation
     {
       for (int y = 0; y < maxStart; y++)
       {
-        populateDistanceBetween(getNode(x), getNode(y));
+        populateDistanceBetween(getNode(y), getNode(x));
       }
       logger.fine("Paths ending at " + x + " done");
     }

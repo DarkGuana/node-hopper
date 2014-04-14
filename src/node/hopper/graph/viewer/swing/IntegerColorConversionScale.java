@@ -1,6 +1,7 @@
 package node.hopper.graph.viewer.swing;
 
 import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.IntegerColorConverterListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,11 +9,8 @@ import java.awt.*;
 /**
  * This swing class is used to show the state of the given color converter.  Essentially it's just a colored bar
  * with indicator ticks down its length to show what colors correspond to what values.
- *
- * TODO: add a listener system to this and the color converter to update this as values change, rather than just
- * on repaints.
  */
-public class IntegerColorConversionScale extends JPanel
+public class IntegerColorConversionScale extends JPanel implements IntegerColorConverterListener
 {
   private static final Color DEFAULT_COLOR = Color.GRAY;
 
@@ -39,6 +37,7 @@ public class IntegerColorConversionScale extends JPanel
   {
     this.converter = converter;
     repaint();
+    converter.addListener(this);
   }
 
   @Override
@@ -91,5 +90,11 @@ public class IntegerColorConversionScale extends JPanel
     }
 
     g.dispose();
+  }
+
+  @Override
+  public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
+  {
+    repaint();
   }
 }

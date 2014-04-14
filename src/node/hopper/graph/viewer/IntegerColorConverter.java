@@ -2,7 +2,9 @@ package node.hopper.graph.viewer;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Dark Guana on 2014-03-30.
@@ -18,6 +20,7 @@ public class IntegerColorConverter
   private Integer maxValue = 0;
 
   private Map<Integer, Color> usedColors = new HashMap<Integer, Color>();
+  private final Set<IntegerColorConverterListener> listeners = new HashSet<IntegerColorConverterListener>();
 
   public Color getColor(Integer val)
   {
@@ -35,7 +38,11 @@ public class IntegerColorConverter
       Color fresh = new Color(red, green, blue);
       usedColors.put(val, fresh);
       if (val > maxValue)
+      {
         maxValue = val;
+        for(IntegerColorConverterListener listener : listeners)
+          listener.maxValueChanged(val, this);
+      }
       used = fresh;
     }
     return used;
@@ -44,5 +51,15 @@ public class IntegerColorConverter
   public Integer getMaxValue()
   {
     return maxValue;
+  }
+
+  public void addListener(IntegerColorConverterListener listener)
+  {
+    listeners.add(listener);
+  }
+
+  public void removeListener(IntegerColorConverterListener listener)
+  {
+    listeners.remove(listener);
   }
 }
