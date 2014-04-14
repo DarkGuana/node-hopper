@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-30.
  */
 public class IntegerColorConverter

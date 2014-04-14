@@ -1,6 +1,7 @@
 package node.hopper.graph;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-29.
  */
 public interface IntegerAggregation

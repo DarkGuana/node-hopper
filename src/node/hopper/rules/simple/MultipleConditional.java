@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-23.
  */
 public class MultipleConditional implements Conditional

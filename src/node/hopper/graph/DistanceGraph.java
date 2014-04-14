@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-25.
  */
 public class DistanceGraph implements IntegerAggregation

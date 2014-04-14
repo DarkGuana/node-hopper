@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-29.
  */
 public class IntegerAggregatePanel extends JPanel implements AggregatePositioner, IntegerAggregateListener

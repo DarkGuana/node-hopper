@@ -8,6 +8,7 @@ import node.hopper.graph.viewer.IntegerColorConverter;
 import javax.swing.*;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-04-02.
  */
 public class IntegerAggregateStatusPanel extends JPanel implements AggregatePositionListener

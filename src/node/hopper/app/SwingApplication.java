@@ -14,6 +14,7 @@ import java.awt.*;
 
 /**
  * TODO: Comment this
+ * Created by Dark Guana on 2014-03-29.
  */
 public class SwingApplication extends JFrame
 {

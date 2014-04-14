@@ -5,6 +5,7 @@ import node.hopper.rules.ConditionalRule;
 import node.hopper.rules.Rule;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-22.
  */
 public class SimpleConditionalRule implements ConditionalRule
