@@ -9,7 +9,7 @@ public interface IntegerAggregation
 
   public Integer getMaxStartNode();
 
-  public Integer getAggregate(Integer start, Integer target);
+  public IntegerAggregate getAggregate(Integer start, Integer target);
 
   public boolean isActive();
 

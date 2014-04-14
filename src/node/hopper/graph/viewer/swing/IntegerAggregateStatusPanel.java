@@ -1,11 +1,11 @@
 package node.hopper.graph.viewer.swing;
 
+import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.viewer.AggregatePositionListener;
 import node.hopper.graph.viewer.IntegerColorConverter;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Created by Dark Guana on 2014-04-02.
@@ -178,13 +178,13 @@ public class IntegerAggregateStatusPanel extends JPanel implements AggregatePosi
 
     if (dataSource != null && start != null && target != null)
     {
-      Integer value = dataSource.getAggregate(start, target);
+      IntegerAggregate value = dataSource.getAggregate(start, target);
       if (value == null)
         getHopCountValueLabel().setText("Not set");
-      else if (value.equals(-1))  // TODO: time for an actual return object
+      else if (value.isNonterminating())
         getHopCountValueLabel().setText("Non-terminating");
       else
-        getHopCountValueLabel().setText(value.toString());
+        getHopCountValueLabel().setText(value.getValue().toString());
     } else
       getHopCountValueLabel().setText("Not set");
   }

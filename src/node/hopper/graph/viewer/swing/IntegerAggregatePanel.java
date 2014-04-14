@@ -1,5 +1,6 @@
 package node.hopper.graph.viewer.swing;
 
+import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregateListener;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.viewer.AggregatePositionListener;
@@ -93,7 +94,7 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
       for (int y = 0; y < dataSource.getMaxStartNode(); y++)
       {
         // y is start node, x is target node
-        Integer val = dataSource.getAggregate(y, x);
+        IntegerAggregate val = dataSource.getAggregate(y, x);
         draw.setColor(colorPicker.getColor(val));
         draw.drawLine(x, y, x, y);
       }
@@ -139,7 +140,7 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
   }
 
   @Override
-  public void aggregateChanged(Integer start, Integer target, Integer aggregateValue, IntegerAggregation source)
+  public void aggregateChanged(Integer start, Integer target, IntegerAggregate aggregateValue, IntegerAggregation source)
   {
     // Tragically, the non-performant part of this method appears to be the drawLine call,
     // re-getting the graphics item is negligible in comparison.

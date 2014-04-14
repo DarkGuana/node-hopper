@@ -1,5 +1,8 @@
 package node.hopper.graph.viewer;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+import node.hopper.graph.IntegerAggregate;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,8 +14,6 @@ import java.util.Set;
  */
 public class IntegerColorConverter
 {
-  private Integer nonTerminatingMarker = -1;
-
   private Color unevaluated = Color.GREEN;
   private Color nonTerminating = Color.BLACK;
 
@@ -22,30 +23,45 @@ public class IntegerColorConverter
   private Map<Integer, Color> usedColors = new HashMap<Integer, Color>();
   private final Set<IntegerColorConverterListener> listeners = new HashSet<IntegerColorConverterListener>();
 
-  public Color getColor(Integer val)
+  public Color getColor(IntegerAggregate val)
   {
     if (val == null)
       return unevaluated;
-    if (nonTerminatingMarker.equals(val))
+    if (val.isNonterminating())
       return nonTerminating;
+    return getColor(val.getValue());
+  }
 
-    Color used = usedColors.get(val);
+  public Color getColor(Integer value)
+  {
+    if (value == null)
+      throw new IllegalArgumentException("null values are not directly accessible");
+
+    Color used = usedColors.get(value);
+
     if (used == null)
+      getFreshColor(value);
+
+    return usedColors.get(value);
+  }
+
+  private Color getFreshColor(Integer value)
+  {
+    int red = (int) (127 * (1 + Math.sin(value / (50 * Math.PI))));
+    int green = (int) (127 * (1 + Math.sin(Math.PI / 2 + value / (50 * Math.PI))));
+    int blue = (int) (127 * (1 + Math.sin(Math.PI + value / (50 * Math.PI))));
+    Color fresh = new Color(red, green, blue);
+
+    usedColors.put(value, fresh);
+
+    if (value > maxValue)
     {
-      int red = (int) (127 * (1 + Math.sin(val / (50 * Math.PI))));
-      int green = (int) (127 * (1 + Math.sin(Math.PI / 2 + val / (50 * Math.PI))));
-      int blue = (int) (127 * (1 + Math.sin(Math.PI + val / (50 * Math.PI))));
-      Color fresh = new Color(red, green, blue);
-      usedColors.put(val, fresh);
-      if (val > maxValue)
-      {
-        maxValue = val;
-        for(IntegerColorConverterListener listener : listeners)
-          listener.maxValueChanged(val, this);
-      }
-      used = fresh;
+      maxValue = value;
+      for(IntegerColorConverterListener listener : listeners)
+        listener.maxValueChanged(value, this);
     }
-    return used;
+
+    return fresh;
   }
 
   public Integer getMaxValue()

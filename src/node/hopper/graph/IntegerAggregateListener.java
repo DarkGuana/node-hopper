@@ -5,7 +5,7 @@ package node.hopper.graph;
  */
 public interface IntegerAggregateListener
 {
-  public void aggregateChanged(Integer start, Integer target, Integer aggregateValue, IntegerAggregation source);
+  public void aggregateChanged(Integer start, Integer target, IntegerAggregate aggregateValue, IntegerAggregation source);
 
   public void activityChanged(Boolean active, IntegerAggregation source);
 }
