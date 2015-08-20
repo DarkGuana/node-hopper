@@ -1,6 +1,7 @@
 package node.hopper.graph.viewer.swing;
 
 import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.Viewer;
 import node.hopper.graph.viewer.ViewerListener;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.awt.*;
 /**
  * Created by Dark Guana on 2014-04-02.
  */
-public class RectangularIntegerAggregateStatusPanel extends JPanel implements ViewerListener
+public class GraphStatusPanel extends JPanel implements ViewerListener
 {
   private IntegerColorConverter colorConverter;
 
@@ -29,7 +30,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   private JList reportHopList;
   private Component reportScale;
 
-  public RectangularIntegerAggregateStatusPanel(IntegerColorConverter colorConverter)
+  public GraphStatusPanel(IntegerColorConverter colorConverter)
   {
     super();
     this.colorConverter = colorConverter;
@@ -154,9 +155,9 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   }
 
   @Override
-  public void setStartNode(Integer startNode)
+  public void setStartNode(Integer startNode, Viewer source)
   {
-    if(startNode != null)
+    if (startNode != null)
       getStartNodeValueLabel().setText(startNode.toString());
     else
       getStartNodeValueLabel().setText("Not set");
@@ -165,7 +166,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   @Override
   public void setFinalNode(Integer finalNode)
   {
-    if(finalNode != null)
+    if (finalNode != null)
       getFinalNodeValueLabel().setText(finalNode.toString());
     else
       getFinalNodeValueLabel().setText("Not set");
@@ -174,7 +175,7 @@ public class RectangularIntegerAggregateStatusPanel extends JPanel implements Vi
   @Override
   public void setHopCount(Integer count)
   {
-    if(count != null)
+    if (count != null)
       getHopCountValueLabel().setText(count.toString());
     else
       getHopCountValueLabel().setText("Not set");

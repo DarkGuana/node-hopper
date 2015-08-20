@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Dark Guana on 2014-03-29.
  */
-public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
+public class GraphPanel extends JPanel implements Viewer
 {
   private RectangularIntegerAggregation dataSource;
   private Image buffer;
@@ -27,7 +27,7 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
   private Timer repaintTimer = null;
   private final List<ViewerListener> listeners = new ArrayList<ViewerListener>(0);
 
-  public RectangularIntegerAggregatePanel(IntegerColorConverter converter)
+  public GraphPanel(IntegerColorConverter converter)
   {
     this.colorPicker = converter;
     addMouseMotionListener(new MouseMotionListener()
@@ -41,17 +41,19 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
       @Override
       public void mouseMoved(MouseEvent e)
       {
-        if(dataSource != null)
-        {
-          for (ViewerListener listener:listeners)
-          {
-            listener.setStartNode(e.getY());
-            listener.setFinalNode(e.getX());
-            listener.setHopCount(dataSource.getValueAt(e.getY(), e.getX()));
-          }
-        }
+        Integer start = Math.min(e.getY(), dataSource.getLength());
+        Integer end = Math.min(e.getX(), dataSource.getWidth());
+        alertListenersToPositionChange(start, end);
       }
     });
+  }
+
+  private void alertListenersToPositionChange(Integer start, Integer end)
+  {
+    for (ViewerListener listener : listeners)
+    {
+      listener.setPosition(start, end, this);
+    }
   }
 
   @Override
@@ -90,7 +92,8 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
     {
       for (int y = 0; y < dataSource.getLength(); y++)
       {
-        Integer val = dataSource.getValueAt(x, y);
+        // y is start node, x is target node
+        Integer val = dataSource.getValueAt(y, x);
         if (val == null)
           imageComplete = false;
         draw.setColor(colorPicker.getColor(val));
@@ -106,7 +109,7 @@ public class RectangularIntegerAggregatePanel extends JPanel implements Viewer
     else if (repaintTimer != null)
     {
       int delay = (int) (endUpdate - startUpdate);
-      repaintTimer.setDelay(delay*8);
+      repaintTimer.setDelay(delay * 8);
     }
   }
 
