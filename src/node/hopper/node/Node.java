@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-22.
  */
 public class Node
@@ -66,7 +67,7 @@ public class Node
   public String toString()
   {
     return "Node{" +
-         id +
+        id +
         '}';
   }
 }

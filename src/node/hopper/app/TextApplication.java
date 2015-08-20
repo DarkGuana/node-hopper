@@ -8,6 +8,7 @@ import node.hopper.rules.simple.SimpleRuleLibrary;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-27.
  */
 public class TextApplication

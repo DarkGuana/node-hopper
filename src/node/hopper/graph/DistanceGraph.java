@@ -11,25 +11,28 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-25.
  */
-public class DistanceGraph implements RectangularIntegerAggregation
+public class DistanceGraph implements IntegerAggregation
 {
   private static Logger logger = Logger.getLogger("DistanceGraph");
-  private static final Integer NON_TERMINATING = -1;
 
   private final Map<Integer, Node> nodeMap = new HashMap<Integer, Node>();
-  private Map<NodePair, Integer> distances = new HashMap<NodePair, Integer>();
+  private Map<NodePair, IntegerAggregate> distances = new HashMap<NodePair, IntegerAggregate>();
+  private boolean active = false;
 
-  private Integer width = 0;
-  private Integer length = 0;
+  private Integer maxTarget = 0;
+  private Integer maxStart = 0;
   private Integer depth = 100000;
   private Rule rule;
 
-  public DistanceGraph(int width, int length, Rule rule)
+  private final HashSet<IntegerAggregateListener> listeners = new HashSet<IntegerAggregateListener>();
+
+  public DistanceGraph(int maxTarget, int maxStart, Rule rule)
   {
     setRule(rule);
-    setSize(width, length);
+    setSize(maxTarget, maxStart);
   }
 
   public Node getNode(Integer id)
@@ -41,17 +44,19 @@ public class DistanceGraph implements RectangularIntegerAggregation
 
   public void populateAllDistances()
   {
-    for (int x = 0; x < width; x++)
+    setActive(true);
+    for (int x = 0; x < maxTarget; x++)
     {
-      for (int y = 0; y < length; y++)
+      for (int y = 0; y < maxStart; y++)
       {
         populateDistanceBetween(getNode(y), getNode(x));
       }
       logger.fine("Paths ending at " + x + " done");
     }
+    setActive(false);
   }
 
-  private Integer populateDistanceBetween(Node start, Node finish)
+  private IntegerAggregate populateDistanceBetween(Node start, Node finish)
   {
     Integer current = start.getId();
     Integer target = finish.getId();
@@ -67,20 +72,20 @@ public class DistanceGraph implements RectangularIntegerAggregation
       Node currentNode = getNode(current);
       currentNode.addNeighbor(nextNode);
 
-      Integer distanceCheck = getDistance(currentNode, finish);
-      if (!current.equals(target) && (history.contains(next) || (distanceCheck != null && distanceCheck.equals(NON_TERMINATING))))
+      IntegerAggregate distanceCheck = getDistance(currentNode, finish);
+      if (!current.equals(target) && (history.contains(next) || (distanceCheck != null && distanceCheck.isNonterminating())))
       {
-        setDistance(start, finish, NON_TERMINATING);
+        setDistance(start, finish, IntegerAggregate.NONTERMINATING);
         logger.finest("Loop detected / depth exceeded");
         break;
-      } else if (distanceCheck != null)
+      } else if (distanceCheck != null && !distanceCheck.isNonterminating())
       {
-        setDistance(start, finish, i + distanceCheck);
+        setDistance(start, finish, new IntegerAggregate(i + distanceCheck.getValue()));
         logger.finest("Previous target found (" + current + " -> " + target + ", " + distanceCheck + ") + " + i);
         break;
       } else
       {
-        setDistance(start, currentNode, i);
+        setDistance(start, currentNode, new IntegerAggregate(i));
         logger.finest("Setting (" + start.getId() + " -> " + currentNode.getId() + ") to " + i);
       }
 
@@ -92,14 +97,14 @@ public class DistanceGraph implements RectangularIntegerAggregation
     return getDistance(start, finish);
   }
 
-  private Integer getDistance(Node start, Node finish)
+  private IntegerAggregate getDistance(Node start, Node finish)
   {
     return distances.get(NodePair.get(start, finish));
   }
 
-  public Integer getDistanceBetween(Integer start, Integer finish)
+  public IntegerAggregate getDistanceBetween(Integer start, Integer finish)
   {
-    if (start > length || finish > width)
+    if (start > maxStart || finish > maxTarget)
     {
       logger.warning("Invalid request, out of range (from: " + start + " to: " + finish);
       throw new IndexOutOfBoundsException("Unable to find value for " + start + " -> " + finish);
@@ -107,15 +112,17 @@ public class DistanceGraph implements RectangularIntegerAggregation
     return getDistance(getNode(start), getNode(finish));
   }
 
-  private Integer setDistance(Node start, Node finish, Integer distance)
+  private IntegerAggregate setDistance(Node start, Node finish, IntegerAggregate distance)
   {
+    for (IntegerAggregateListener listener : listeners)
+      listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
     return distances.put(NodePair.get(start, finish), distance);
   }
 
   private void setSize(int width, int length)
   {
-    this.width = width;
-    this.length = length;
+    this.maxTarget = width;
+    this.maxStart = length;
   }
 
   public void setRule(Rule rule)
@@ -130,20 +137,45 @@ public class DistanceGraph implements RectangularIntegerAggregation
   }
 
   @Override
-  public Integer getWidth()
+  public Integer getMaxTargetNode()
   {
-    return width;
+    return maxTarget;
   }
 
   @Override
-  public Integer getLength()
+  public Integer getMaxStartNode()
   {
-    return length;
+    return maxStart;
   }
 
   @Override
-  public Integer getValueAt(Integer x, Integer y)
+  public IntegerAggregate getAggregate(Integer start, Integer target)
   {
-    return getDistanceBetween(y, x);
+    return getDistanceBetween(start, target);
+  }
+
+  @Override
+  public boolean isActive()
+  {
+    return active;
+  }
+
+  @Override
+  public void addListener(IntegerAggregateListener listener)
+  {
+    listeners.add(listener);
+  }
+
+  @Override
+  public void removeListener(IntegerAggregateListener listener)
+  {
+    listeners.remove(listener);
+  }
+
+  public void setActive(boolean active)
+  {
+    this.active = active;
+    for (IntegerAggregateListener listener : listeners)
+      listener.activityChanged(active, this);
   }
 }

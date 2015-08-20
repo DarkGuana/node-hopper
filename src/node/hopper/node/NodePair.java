@@ -1,6 +1,7 @@
 package node.hopper.node;
 
 /**
+ * TODO: Comment this
  * Created by Dark Guana on 2014-03-26.
  */
 public class NodePair

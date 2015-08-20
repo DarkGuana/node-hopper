@@ -3,8 +3,8 @@ package node.hopper.app;
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.RectangularIntegerAggregation;
 import node.hopper.graph.viewer.IntegerColorConverter;
-import node.hopper.graph.viewer.swing.RectangularIntegerAggregatePanel;
-import node.hopper.graph.viewer.swing.RectangularIntegerAggregateStatusPanel;
+import node.hopper.graph.viewer.swing.GraphPanel;
+import node.hopper.graph.viewer.swing.GraphStatusPanel;
 import node.hopper.rules.PrioritizedConditionalRule;
 import node.hopper.rules.RuleLibrary;
 import node.hopper.rules.simple.SimpleRuleLibrary;
@@ -15,17 +15,22 @@ import java.awt.*;
 /**
  * Created by Dark Guana on 2014-03-29.
  */
-public class SwingApplication extends JFrame
+public class SwingApplication
 {
   private final RuleLibrary library;
-  private RectangularIntegerAggregatePanel reporter;
+
+  private final JFrame appFrame;
+
+  private GraphPanel reporter;
   private RectangularIntegerAggregation display;
-  private RectangularIntegerAggregateStatusPanel reporterStatus;
+  private GraphStatusPanel reporterStatus;
   private IntegerColorConverter colorConverter = new IntegerColorConverter();
 
   public SwingApplication(RuleLibrary library)
   {
-    super("NodeHopper");
+    appFrame = new JFrame("NodeHopper");
+    appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     this.library = library;
 
     buildLayout();
@@ -36,8 +41,8 @@ public class SwingApplication extends JFrame
   private void buildLayout()
   {
     JScrollPane scrollPane = new JScrollPane(getReporter());
-    getContentPane().add(scrollPane, BorderLayout.CENTER);
-    getContentPane().add(getReporterStatus(), BorderLayout.EAST);
+    appFrame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+    appFrame.getContentPane().add(getReporterStatus(), BorderLayout.EAST);
   }
 
   public void setDisplay(RectangularIntegerAggregation display)
@@ -53,12 +58,12 @@ public class SwingApplication extends JFrame
 
   private static DistanceGraph getTestSystem(RuleLibrary library)
   {
-    int width = 3000;
-    int length = 3000;
+    int width = 800;
+    int length = 800;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
-    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(255)));
-    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(113), library.getMoreThanTarget()), library.getDivide(113)));
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(100)));
+    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(99), library.getMoreThanTarget()), library.getDivide(99)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
     DistanceGraph dg = new DistanceGraph(width, length, rule);
@@ -68,29 +73,31 @@ public class SwingApplication extends JFrame
   public static void main(String[] args)
   {
     SwingApplication app = new SwingApplication(new SimpleRuleLibrary());
-    app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     DistanceGraph graph = getTestSystem(app.library);
     app.setDisplay(graph);
-
-    app.pack();
-    app.setVisible(true);
+    app.show();
 
     graph.populateAllDistances();
-    app.pack();
   }
 
-  private RectangularIntegerAggregatePanel getReporter()
+  private void show()
+  {
+    appFrame.pack();
+    appFrame.setVisible(true);
+  }
+
+  private GraphPanel getReporter()
   {
     if (reporter == null)
-      reporter = new RectangularIntegerAggregatePanel(colorConverter);
+      reporter = new GraphPanel(colorConverter);
     return reporter;
   }
 
-  private RectangularIntegerAggregateStatusPanel getReporterStatus()
+  private GraphStatusPanel getReporterStatus()
   {
     if (reporterStatus == null)
-      reporterStatus = new RectangularIntegerAggregateStatusPanel(colorConverter);
+      reporterStatus = new GraphStatusPanel(colorConverter);
     return reporterStatus;
   }
 }
