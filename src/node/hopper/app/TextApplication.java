@@ -1,6 +1,7 @@
 package node.hopper.app;
 
 import node.hopper.graph.DistanceGraph;
+import node.hopper.graph.viewer.text.TextReport;
 import node.hopper.rules.PrioritizedConditionalRule;
 import node.hopper.rules.RuleLibrary;
 import node.hopper.rules.simple.SimpleRuleLibrary;
@@ -33,24 +34,8 @@ public class TextApplication
     DistanceGraph dg = new DistanceGraph(width, length, rule);
     dg.populateAllDistances();
 
-    StringBuilder reporter = new StringBuilder();
-    for (int x = 0; x < width; x++)
-    {
-      reporter.append('\t').append(x);
-    }
-    reporter.append('\n');
-    for (int y = 0; y < length; y++)
-    {
-      reporter.append(y);
-      for (int x = 0; x < width; x++)
-      {
-        String displayValue = dg.getDistanceBetween(y, x).toString(); // dg.getDistanceBetween(y,x) < 0 ? "#" : " ";
-        reporter.append('\t').append(displayValue);
-      }
-      reporter.append('\n');
-    }
-
-    System.out.println(reporter.toString());
+    TextReport report = new TextReport(dg);
+    report.reportToStdOut();
   }
 
   public static void main(String[] args)
