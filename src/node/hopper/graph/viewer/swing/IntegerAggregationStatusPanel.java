@@ -1,8 +1,10 @@
 package node.hopper.graph.viewer.swing;
 
+import node.hopper.graph.IntegerAggregate;
+import node.hopper.graph.IntegerAggregation;
+import node.hopper.graph.viewer.AggregatePositionListener;
+import node.hopper.graph.viewer.AggregatePositioner;
 import node.hopper.graph.viewer.IntegerColorConverter;
-import node.hopper.graph.viewer.Viewer;
-import node.hopper.graph.viewer.ViewerListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +12,10 @@ import java.awt.*;
 /**
  * Created by Dark Guana on 2014-04-02.
  */
-public class GraphStatusPanel extends JPanel implements ViewerListener
+public class IntegerAggregationStatusPanel extends JPanel implements AggregatePositionListener
 {
   private IntegerColorConverter colorConverter;
+  private IntegerAggregation dataSource;
 
   private JPanel startNodePanel;
   private JLabel startNodeLabel;
@@ -27,10 +30,10 @@ public class GraphStatusPanel extends JPanel implements ViewerListener
   private JLabel hopCountValueLabel;
 
   private JSplitPane reportPane;
-  private JList reportHopList;
-  private Component reportScale;
+  private JList      reportHopList;
+  private Component  reportScale;
 
-  public GraphStatusPanel(IntegerColorConverter colorConverter)
+  public IntegerAggregationStatusPanel(IntegerColorConverter colorConverter)
   {
     super();
     this.colorConverter = colorConverter;
@@ -154,30 +157,31 @@ public class GraphStatusPanel extends JPanel implements ViewerListener
     return reportScale;
   }
 
+  public void setDataSource(IntegerAggregation dataSource)
+  {
+    this.dataSource = dataSource;
+  }
+
   @Override
-  public void setStartNode(Integer startNode, Viewer source)
+  public void setPosition(Integer startNode, Integer finalNode, AggregatePositioner source)
   {
     if (startNode != null)
       getStartNodeValueLabel().setText(startNode.toString());
     else
       getStartNodeValueLabel().setText("Not set");
-  }
 
-  @Override
-  public void setFinalNode(Integer finalNode)
-  {
     if (finalNode != null)
       getFinalNodeValueLabel().setText(finalNode.toString());
     else
       getFinalNodeValueLabel().setText("Not set");
-  }
 
-  @Override
-  public void setHopCount(Integer count)
-  {
-    if (count != null)
-      getHopCountValueLabel().setText(count.toString());
-    else
-      getHopCountValueLabel().setText("Not set");
+    if(dataSource != null && startNode != null && finalNode != null)
+    {
+      IntegerAggregate aggregate = dataSource.getAggregate(startNode, finalNode);
+      if(aggregate != null && aggregate.getValue() != null)
+        getHopCountValueLabel().setText(aggregate.getValue().toString());
+      else
+        getHopCountValueLabel().setText("Not set");
+    }
   }
 }

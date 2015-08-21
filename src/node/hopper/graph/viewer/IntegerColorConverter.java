@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class IntegerColorConverter
 {
-  private Color unevaluated = Color.GREEN;
+  private Color unevaluated = Color.DARK_GRAY;
   private Color nonTerminating = Color.BLACK;
 
   private Integer minExpectedValue = 0;

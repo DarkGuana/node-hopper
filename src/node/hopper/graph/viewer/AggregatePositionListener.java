@@ -6,5 +6,5 @@ package node.hopper.graph.viewer;
  */
 public interface AggregatePositionListener
 {
-  public void setPosition(Integer startNode, Integer finalNode);
+  public void setPosition(Integer startNode, Integer finalNode, AggregatePositioner source);
 }

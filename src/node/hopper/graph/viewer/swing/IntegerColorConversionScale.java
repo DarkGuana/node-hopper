@@ -43,6 +43,17 @@ public class IntegerColorConversionScale extends JPanel
     int barX = horizontalGap;
     int tickX = horizontalGap+barWidth+tickWidth;
 
+    // Draw color bar
+    Color originalColor = g.getColor();
+    for (int i = topY; i < bottomY; i++)
+    {
+      float farAlong = 1 - ((float) i) / bottomY;
+      Color valueColor = converter.getColor((int) (farAlong * converter.getMaxValue()));
+      g.setColor(valueColor);
+      g.drawLine(barX, i, barX + barWidth, i);
+    }
+    g.setColor(originalColor);
+
     // Draw the vertical line of the bar
     g.drawLine(barX, topY, barX, bottomY);
 

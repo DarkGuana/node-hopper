@@ -1,11 +1,9 @@
 package node.hopper.graph.viewer.swing;
 
 import node.hopper.graph.IntegerAggregate;
-import node.hopper.graph.IntegerAggregateListener;
 import node.hopper.graph.IntegerAggregation;
-import node.hopper.graph.viewer.AggregatePositionListener;
-import node.hopper.graph.viewer.AggregatePositioner;
-import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.IntegerAggregationListener;
+import node.hopper.graph.viewer.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,9 +20,10 @@ import java.util.List;
  * TODO: Comment this
  * Created by Dark Guana on 2014-03-29.
  */
-public class IntegerAggregatePanel extends JPanel implements AggregatePositioner, IntegerAggregateListener
+public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener
 {
-  private IntegerAggregation dataSource;
+  private static final int DEFAULT_REPAINTING_TIME = 50;
+  private IntegerAggregation    dataSource;
   private IntegerColorConverter colorPicker;
 
   private Image buffer;
@@ -32,7 +31,7 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
 
   private final List<AggregatePositionListener> listeners = new ArrayList<AggregatePositionListener>(0);
 
-  public IntegerAggregatePanel(IntegerColorConverter converter)
+  public IntegerAggregationPanel(IntegerColorConverter converter)
   {
     this.colorPicker = converter;
     addMouseMotionListener(new MouseMotionListener()
@@ -50,13 +49,18 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
         Integer end = Math.min(e.getX(), dataSource.getMaxTargetNode());
         if (dataSource != null)
         {
-          for (AggregatePositionListener listener : listeners)
-          {
-            listener.setPosition(start, end);
-          }
+          reportCurrentPosition(start, end);
         }
       }
     });
+  }
+
+  private void reportCurrentPosition(Integer start, Integer end)
+  {
+    for (AggregatePositionListener listener : listeners)
+    {
+      listener.setPosition(start, end, this);
+    }
   }
 
   @Override
@@ -88,7 +92,8 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
 
   private void initBuffer()
   {
-    buffer = new BufferedImage(dataSource.getMaxTargetNode(), dataSource.getMaxStartNode(), BufferedImage.TYPE_3BYTE_BGR);
+    buffer =
+      new BufferedImage(dataSource.getMaxTargetNode(), dataSource.getMaxStartNode(), BufferedImage.TYPE_3BYTE_BGR);
     Graphics draw = buffer.getGraphics().create();
     for (int x = 0; x < dataSource.getMaxTargetNode(); x++)
     {
@@ -105,7 +110,7 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
 
   private void startRepainting()
   {
-    repaintTimer = new Timer(200, new ActionListener()
+    repaintTimer = new Timer(DEFAULT_REPAINTING_TIME, new ActionListener()
     {
       @Override
       public void actionPerformed(ActionEvent e)
@@ -141,7 +146,8 @@ public class IntegerAggregatePanel extends JPanel implements AggregatePositioner
   }
 
   @Override
-  public void aggregateChanged(Integer start, Integer target, IntegerAggregate aggregateValue, IntegerAggregation source)
+  public void aggregateChanged(Integer start, Integer target, IntegerAggregate aggregateValue,
+    IntegerAggregation source)
   {
     // Tragically, the non-performant part of this method appears to be the drawLine call,
     // re-getting the graphics item is negligible in comparison.

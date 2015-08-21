@@ -18,16 +18,16 @@ public class DistanceGraph implements IntegerAggregation
 {
   private static Logger logger = Logger.getLogger("DistanceGraph");
 
-  private final Map<Integer, Node> nodeMap = new HashMap<Integer, Node>();
-  private Map<NodePair, IntegerAggregate> distances = new HashMap<NodePair, IntegerAggregate>();
-  private boolean active = false;
+  private final Map<Integer, Node>              nodeMap   = new HashMap<Integer, Node>();
+  private       Map<NodePair, IntegerAggregate> distances = new HashMap<NodePair, IntegerAggregate>();
+  private       boolean                         active    = false;
 
   private Integer maxTarget = 0;
-  private Integer maxStart = 0;
-  private Integer depth = 100000;
+  private Integer maxStart  = 0;
+  private Integer depth     = 100000;
   private Rule rule;
 
-  private final HashSet<IntegerAggregateListener> listeners = new HashSet<IntegerAggregateListener>();
+  private final HashSet<IntegerAggregationListener> listeners = new HashSet<IntegerAggregationListener>();
 
   public DistanceGraph(int maxTarget, int maxStart, Rule rule)
   {
@@ -114,7 +114,7 @@ public class DistanceGraph implements IntegerAggregation
 
   private IntegerAggregate setDistance(Node start, Node finish, IntegerAggregate distance)
   {
-    for (IntegerAggregateListener listener : listeners)
+    for (IntegerAggregationListener listener : listeners)
       listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
     return distances.put(NodePair.get(start, finish), distance);
   }
@@ -161,13 +161,13 @@ public class DistanceGraph implements IntegerAggregation
   }
 
   @Override
-  public void addListener(IntegerAggregateListener listener)
+  public void addListener(IntegerAggregationListener listener)
   {
     listeners.add(listener);
   }
 
   @Override
-  public void removeListener(IntegerAggregateListener listener)
+  public void removeListener(IntegerAggregationListener listener)
   {
     listeners.remove(listener);
   }
@@ -175,7 +175,7 @@ public class DistanceGraph implements IntegerAggregation
   public void setActive(boolean active)
   {
     this.active = active;
-    for (IntegerAggregateListener listener : listeners)
+    for (IntegerAggregationListener listener : listeners)
       listener.activityChanged(active, this);
   }
 }

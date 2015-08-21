@@ -14,7 +14,7 @@ public interface IntegerAggregation
 
   public boolean isActive();
 
-  public void addListener(IntegerAggregateListener listener);
+  public void addListener(IntegerAggregationListener listener);
 
-  public void removeListener(IntegerAggregateListener listener);
+  public void removeListener(IntegerAggregationListener listener);
 }
