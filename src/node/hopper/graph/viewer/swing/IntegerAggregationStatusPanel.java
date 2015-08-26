@@ -54,7 +54,6 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
 
     // Arrange them
     getStartNodePanel().setAlignmentX(0);
-    getStartNodePanel().setBorder(BorderFactory.createLineBorder(Color.RED));
     getFinalNodePanel().setAlignmentX(0);
     getHopCountPanel().setAlignmentX(0);
     getReportPane().setAlignmentX(0);
@@ -65,13 +64,11 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     if (startNodePanel == null)
     {
       startNodePanel = new JPanel();
+      BoxLayout layout = new BoxLayout(startNodePanel, BoxLayout.LINE_AXIS);
+      startNodePanel.setLayout(layout);
+
       startNodePanel.add(getStartNodeLabel());
       startNodePanel.add(getStartNodeValueLabel());
-
-      getStartNodeLabel().setHorizontalAlignment(JLabel.LEFT);
-      getStartNodeLabel().setBorder(BorderFactory.createLineBorder(Color.BLUE));
-      getStartNodeValueLabel().setHorizontalAlignment(JLabel.RIGHT);
-      getStartNodeValueLabel().setBorder(BorderFactory.createLineBorder(Color.GREEN));
     }
     return startNodePanel;
   }
@@ -95,6 +92,9 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     if (finalNodePanel == null)
     {
       finalNodePanel = new JPanel();
+      BoxLayout layout = new BoxLayout(finalNodePanel, BoxLayout.LINE_AXIS);
+      finalNodePanel.setLayout(layout);
+
       finalNodePanel.add(getFinalNodeLabel());
       finalNodePanel.add(getFinalNodeValueLabel());
     }
@@ -121,6 +121,9 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     if (hopCountPanel == null)
     {
       hopCountPanel = new JPanel();
+      BoxLayout layout = new BoxLayout(hopCountPanel, BoxLayout.LINE_AXIS);
+      hopCountPanel.setLayout(layout);
+
       hopCountPanel.add(getHopCountLabel());
       hopCountPanel.add(getHopCountValueLabel());
     }
