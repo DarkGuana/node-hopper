@@ -1,6 +1,7 @@
 package node.hopper.graph.viewer.swing;
 
 import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.IntegerColorConverterListener;
 import sun.swing.SwingUtilities2;
 
 import javax.swing.*;
@@ -9,7 +10,7 @@ import java.awt.*;
 /**
  * TODO (clm): DOCUMENT ME!!!
  */
-public class IntegerColorConversionScale extends JPanel
+public class IntegerColorConversionScale extends JPanel implements IntegerColorConverterListener
 {
   public static final Integer DEFAULT_VERTICAL_GAP = 5;
   public static final Integer DEFAULT_HORIZONTAL_GAP = 5;
@@ -28,6 +29,7 @@ public class IntegerColorConversionScale extends JPanel
   public IntegerColorConversionScale(IntegerColorConverter converter)
   {
     this.converter = converter;
+    converter.addListener(this);
     setPreferredSize(new Dimension(200, 400));
   }
 
@@ -67,5 +69,11 @@ public class IntegerColorConversionScale extends JPanel
       g.drawString(label.toString(), tickX, y);
     }
     g.dispose();
+  }
+
+  @Override
+  public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
+  {
+    repaint();
   }
 }
