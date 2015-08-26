@@ -43,7 +43,7 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
   private void buildLayout()
   {
     // Set the layout to for the parent panel
-    BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
+    BoxLayout layout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
     setLayout(layout);
 
     // Add the sub components
@@ -51,6 +51,13 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     add(getFinalNodePanel());
     add(getHopCountPanel());
     add(getReportPane());
+
+    // Arrange them
+    getStartNodePanel().setAlignmentX(0);
+    getStartNodePanel().setBorder(BorderFactory.createLineBorder(Color.RED));
+    getFinalNodePanel().setAlignmentX(0);
+    getHopCountPanel().setAlignmentX(0);
+    getReportPane().setAlignmentX(0);
   }
 
   private JPanel getStartNodePanel()
@@ -60,6 +67,11 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
       startNodePanel = new JPanel();
       startNodePanel.add(getStartNodeLabel());
       startNodePanel.add(getStartNodeValueLabel());
+
+      getStartNodeLabel().setHorizontalAlignment(JLabel.LEFT);
+      getStartNodeLabel().setBorder(BorderFactory.createLineBorder(Color.BLUE));
+      getStartNodeValueLabel().setHorizontalAlignment(JLabel.RIGHT);
+      getStartNodeValueLabel().setBorder(BorderFactory.createLineBorder(Color.GREEN));
     }
     return startNodePanel;
   }
@@ -178,8 +190,10 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     if(dataSource != null && startNode != null && finalNode != null)
     {
       IntegerAggregate aggregate = dataSource.getAggregate(startNode, finalNode);
-      if(aggregate != null && aggregate.getValue() != null)
+      if(aggregate != null && !aggregate.isNonterminating())
         getHopCountValueLabel().setText(aggregate.getValue().toString());
+      else if(aggregate != null && aggregate.isNonterminating())
+        getHopCountValueLabel().setText("Non terminating");
       else
         getHopCountValueLabel().setText("Not set");
     }

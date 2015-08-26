@@ -15,6 +15,16 @@ public class NodePair
     this.finish = finish;
   }
 
+  public Node getStart()
+  {
+    return start;
+  }
+
+  public Node getFinish()
+  {
+    return finish;
+  }
+
   public static NodePair get(Node start, Node finish)
   {
     return new NodePair(start, finish);

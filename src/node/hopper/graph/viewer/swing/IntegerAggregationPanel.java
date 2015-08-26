@@ -22,12 +22,14 @@ import java.util.List;
  */
 public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener
 {
-  private static final int DEFAULT_REPAINTING_TIME = 50;
+  private static final int DEFAULT_REPAINTING_TIME = 25;
   private IntegerAggregation    dataSource;
   private IntegerColorConverter colorPicker;
 
   private Image buffer;
   private Timer repaintTimer = null;
+
+  private boolean[][] renderHit;
 
   private final List<AggregatePositionListener> listeners = new ArrayList<AggregatePositionListener>(0);
 
@@ -83,6 +85,7 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
   public void setDataSource(IntegerAggregation dataSource)
   {
     this.dataSource = dataSource;
+    renderHit = new boolean[dataSource.getMaxTargetNode()+1][dataSource.getMaxStartNode()+1];
     dataSource.addListener(this);
     setPreferredSize(new Dimension(dataSource.getMaxTargetNode(), dataSource.getMaxStartNode()));
     initBuffer();
@@ -154,6 +157,11 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
     Graphics g = buffer.getGraphics();
     g.setColor(colorPicker.getColor(aggregateValue));
     g.drawLine(target, start, target, start);
+    if (!renderHit[target][start])
+      renderHit[target][start] = true;
+    else
+      System.out.println(aggregateValue.getValue());
+
     g.dispose();
   }
 

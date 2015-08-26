@@ -4,10 +4,7 @@ import node.hopper.node.Node;
 import node.hopper.node.NodePair;
 import node.hopper.rules.Rule;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -18,6 +15,11 @@ public class DistanceGraph implements IntegerAggregation
 {
   private static Logger logger = Logger.getLogger("DistanceGraph");
 
+  public static enum PopulationMethod
+  {
+    START_TO_FINISH, FINISH_TO_START, RANDOM, OUT_FROM_CENTER
+  }
+
   private final Map<Integer, Node>              nodeMap   = new HashMap<Integer, Node>();
   private       Map<NodePair, IntegerAggregate> distances = new HashMap<NodePair, IntegerAggregate>();
   private       boolean                         active    = false;
@@ -25,14 +27,17 @@ public class DistanceGraph implements IntegerAggregation
   private Integer maxTarget = 0;
   private Integer maxStart  = 0;
   private Integer depth     = 100000;
+
+  private PopulationMethod populationMethod = PopulationMethod.START_TO_FINISH;
   private Rule rule;
 
   private final HashSet<IntegerAggregationListener> listeners = new HashSet<IntegerAggregationListener>();
 
-  public DistanceGraph(int maxTarget, int maxStart, Rule rule)
+  public DistanceGraph(int maxTarget, int maxStart, PopulationMethod populationMethod, Rule rule)
   {
     setRule(rule);
     setSize(maxTarget, maxStart);
+    setPopulationMethod(populationMethod);
   }
 
   public Node getNode(Integer id)
@@ -45,19 +50,106 @@ public class DistanceGraph implements IntegerAggregation
   public void populateAllDistances()
   {
     setActive(true);
-    for (int x = 0; x < maxTarget; x++)
+
+    logger.fine("Populating distances using " + populationMethod);
+    switch(populationMethod)
     {
-      for (int y = 0; y < maxStart; y++)
-      {
-        populateDistanceBetween(getNode(y), getNode(x));
-      }
-      logger.fine("Paths ending at " + x + " done");
+      default:
+      case START_TO_FINISH:
+        for (int y = 0; y < maxStart; y++)
+        {
+          for (int x = 0; x < maxTarget; x++)
+          {
+            populateDistanceBetween(getNode(y), getNode(x));
+          }
+          logger.fine("Paths ending at " + y + " done");
+        }
+        break;
+
+      case FINISH_TO_START:
+        for (int x = 0; x < maxTarget; x++)
+        {
+          for (int y = 0; y < maxStart; y++)
+          {
+            populateDistanceBetween(getNode(y), getNode(x));
+          }
+          logger.fine("Paths ending at " + x + " done");
+        }
+        break;
+
+      case RANDOM:
+        Random r = new Random(System.currentTimeMillis());
+        List<NodePair> renderOrder = new ArrayList<NodePair>();
+        for (int x = 0; x < maxTarget; x++)
+        {
+          for (int y = 0; y < maxStart; y++)
+          {
+            renderOrder.add(NodePair.get(new Node(y), new Node(x)));
+          }
+        }
+        Collections.shuffle(renderOrder, r);
+        while (!renderOrder.isEmpty())
+        {
+          NodePair pair = renderOrder.remove(renderOrder.size() - 1);
+          populateDistanceBetween(pair.getStart(), pair.getFinish());
+        }
+        break;
+
+      case OUT_FROM_CENTER:
+        renderOrder = new ArrayList<NodePair>();
+        Set<NodePair> rendered = new HashSet<NodePair>();
+        for (int diag = 0; diag < Math.min(maxStart, maxTarget); diag++)
+        {
+          renderOrder.add(NodePair.get(getNode(diag), getNode(diag)));
+        }
+        for (int height = 0; height < maxStart; height++)
+        {
+          rendered.add(NodePair.get(getNode(height), getNode(-1)));
+          rendered.add(NodePair.get(getNode(height), getNode(maxTarget + 1)));
+        }
+        for (int width = 0; width < maxTarget; width++)
+        {
+          rendered.add(NodePair.get(getNode(-1), getNode(width)));
+          rendered.add(NodePair.get(getNode(maxStart+1), getNode(width)));
+        }
+
+        List<NodePair> subRenderOrder = new ArrayList<NodePair>();
+        while (!renderOrder.isEmpty())
+        {
+          NodePair pair = renderOrder.remove(renderOrder.size() - 1);
+          rendered.add(pair);
+          populateDistanceBetween(pair.getStart(), pair.getFinish());
+          NodePair north = NodePair.get(getNode(pair.getStart().getId()+1), pair.getFinish());
+          NodePair south = NodePair.get(getNode(pair.getStart().getId()-1), pair.getFinish());
+          NodePair west = NodePair.get(pair.getStart(), getNode(pair.getFinish().getId() + 1));
+          NodePair east = NodePair.get(pair.getStart(), getNode(pair.getFinish().getId()-1));
+
+          if(!rendered.contains(north))
+            subRenderOrder.add(north);
+          if(!rendered.contains(south))
+            subRenderOrder.add(south);
+          if(!rendered.contains(west))
+            subRenderOrder.add(west);
+          if(!rendered.contains(east))
+            subRenderOrder.add(east);
+
+          if(renderOrder.isEmpty())
+          {
+            renderOrder.addAll(subRenderOrder);
+            subRenderOrder.clear();
+          }
+        }
+        break;
     }
+
     setActive(false);
   }
 
   private IntegerAggregate populateDistanceBetween(Node start, Node finish)
   {
+    if(distances.get(NodePair.get(start, finish)) != null)
+      return distances.get(NodePair.get(start, finish));
+
     Integer current = start.getId();
     Integer target = finish.getId();
 
@@ -72,20 +164,21 @@ public class DistanceGraph implements IntegerAggregation
       Node currentNode = getNode(current);
       currentNode.addNeighbor(nextNode);
 
-      IntegerAggregate distanceCheck = getDistance(currentNode, finish);
-      if (!current.equals(target) && (history.contains(next) || (distanceCheck != null && distanceCheck.isNonterminating())))
+      IntegerAggregate distanceCheck = getDistance(nextNode, finish);
+      if (!current.equals(target) &&
+        (history.contains(next) || (distanceCheck != null && distanceCheck.isNonterminating())))
       {
         setDistance(start, finish, IntegerAggregate.NONTERMINATING);
         logger.finest("Loop detected / depth exceeded");
         break;
       } else if (distanceCheck != null && !distanceCheck.isNonterminating())
       {
-        setDistance(start, finish, new IntegerAggregate(i + distanceCheck.getValue()));
+        setDistance(start, finish, new IntegerAggregate(i + distanceCheck.getValue() + 1));
         logger.finest("Previous target found (" + current + " -> " + target + ", " + distanceCheck + ") + " + i);
         break;
-      } else
+      } else if (currentNode.equals(finish))
       {
-        setDistance(start, currentNode, new IntegerAggregate(i));
+        setDistance(start, finish, new IntegerAggregate(i));
         logger.finest("Setting (" + start.getId() + " -> " + currentNode.getId() + ") to " + i);
       }
 
@@ -114,9 +207,18 @@ public class DistanceGraph implements IntegerAggregation
 
   private IntegerAggregate setDistance(Node start, Node finish, IntegerAggregate distance)
   {
-    for (IntegerAggregationListener listener : listeners)
-      listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
-    return distances.put(NodePair.get(start, finish), distance);
+    IntegerAggregate oldValue = distances.get(NodePair.get(start, finish));
+    boolean addDistance = oldValue == null || (oldValue.isNonterminating() && !distance.isNonterminating());
+
+    if (addDistance)
+      distances.put(NodePair.get(start, finish), distance);
+
+    if (addDistance && start.getId() < getMaxStartNode() && finish.getId() < getMaxTargetNode())
+    {
+      for (IntegerAggregationListener listener : listeners)
+        listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
+    }
+    return oldValue;
   }
 
   private void setSize(int width, int length)
@@ -128,6 +230,12 @@ public class DistanceGraph implements IntegerAggregation
   public void setRule(Rule rule)
   {
     this.rule = rule;
+    resetDistances();
+  }
+
+  public void setPopulationMethod(PopulationMethod populationMethod)
+  {
+    this.populationMethod = populationMethod;
     resetDistances();
   }
 

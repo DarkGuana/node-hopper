@@ -26,12 +26,22 @@ public class TextApplication
     int width = 11;
     int length = 11;
 
+
+//    PrioritizedConditionalRule rule = library.getNewPCRule();
+//    rule.addNewConditional(library.combine(library.getMoreThanTarget(), library.getSubtract(1)));
+//    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(2)));
+//    PrioritizedConditionalRule rule = library.getNewPCRule();
+//    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(3)));
+//    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(2), library.getMoreThanTarget()), library.getDivide(2)));
+//    rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
+
     PrioritizedConditionalRule rule = library.getNewPCRule();
-    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(3)));
-    rule.addNewConditional(library.combine(library.combine(library.getDividableBy(2), library.getMoreThanTarget()), library.getDivide(2)));
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(100)));
+    rule.addNewConditional(
+      library.combine(library.combine(library.getDividableBy(99), library.getMoreThanTarget()), library.getDivide(99)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
-    DistanceGraph dg = new DistanceGraph(width, length, rule);
+    DistanceGraph dg = new DistanceGraph(width, length, DistanceGraph.PopulationMethod.START_TO_FINISH, rule);
     dg.populateAllDistances();
 
     TextReport report = new TextReport(dg);
