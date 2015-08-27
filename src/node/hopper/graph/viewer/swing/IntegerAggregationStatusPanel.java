@@ -8,14 +8,17 @@ import node.hopper.graph.viewer.IntegerColorConverter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * Created by Dark Guana on 2014-04-02.
  */
 public class IntegerAggregationStatusPanel extends JPanel implements AggregatePositionListener
 {
+  private static final String HOP_SEPARATOR = " -> ";
+
   private IntegerColorConverter colorConverter;
-  private IntegerAggregation dataSource;
+  private IntegerAggregation    dataSource;
 
   private JPanel startNodePanel;
   private JLabel startNodeLabel;
@@ -29,9 +32,10 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
   private JLabel hopCountLabel;
   private JLabel hopCountValueLabel;
 
-  private JSplitPane reportPane;
-  private JList      reportHopList;
-  private Component  reportScale;
+  private JSplitPane  reportPane;
+  private JScrollPane reportHopScrollPane;
+  private JList       reportHopList;
+  private Component   reportScale;
 
   public IntegerAggregationStatusPanel(IntegerColorConverter colorConverter)
   {
@@ -149,10 +153,20 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     if (reportPane == null)
     {
       reportPane = new JSplitPane();
-      reportPane.setLeftComponent(getReportHopList());
+      reportPane.setLeftComponent(getReportHopScrollPane());
       reportPane.setRightComponent(getReportScale());
     }
     return reportPane;
+  }
+
+  private JScrollPane getReportHopScrollPane()
+  {
+    if (reportHopScrollPane == null)
+    {
+      reportHopScrollPane = new JScrollPane();
+      reportHopScrollPane.setViewportView(getReportHopList());
+    }
+    return reportHopScrollPane;
   }
 
   private JList getReportHopList()
@@ -190,15 +204,33 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
     else
       getFinalNodeValueLabel().setText("Not set");
 
-    if(dataSource != null && startNode != null && finalNode != null)
+    if (dataSource != null && startNode != null && finalNode != null)
     {
       IntegerAggregate aggregate = dataSource.getAggregate(startNode, finalNode);
-      if(aggregate != null && !aggregate.isNonterminating())
+      if (aggregate != null && !aggregate.isNonterminating())
         getHopCountValueLabel().setText(aggregate.getValue().toString());
-      else if(aggregate != null && aggregate.isNonterminating())
+      else if (aggregate != null && aggregate.isNonterminating())
         getHopCountValueLabel().setText("Non terminating");
       else
         getHopCountValueLabel().setText("Not set");
+    }
+  }
+
+  @Override
+  public void setDetailedHops(List<Integer> hopPath, AggregatePositioner source)
+  {
+    DefaultListModel model = ((DefaultListModel) getReportHopList().getModel());
+    model.clear();
+
+    if (hopPath == null)
+      ((DefaultListModel) reportHopList.getModel()).addElement("No selection");
+    else
+    {
+      model.addElement(hopPath.get(0) + HOP_SEPARATOR + hopPath.get(hopPath.size() - 1));
+      for (Integer value : hopPath)
+      {
+        model.addElement(value);
+      }
     }
   }
 }

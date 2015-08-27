@@ -7,10 +7,7 @@ import node.hopper.graph.viewer.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
@@ -55,6 +52,56 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
         }
       }
     });
+    addMouseListener(new MouseListener()
+    {
+      @Override
+      public void mouseClicked(MouseEvent e)
+      {
+        Integer start = Math.min(e.getY(), dataSource.getMaxStartNode());
+        Integer end = Math.min(e.getX(), dataSource.getMaxTargetNode());
+
+        if (dataSource != null)
+        {
+          reportDetailInfoPosition(start, end);
+        }
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e)
+      {
+        // do nothing
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e)
+      {
+        // do nothing
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e)
+      {
+        // do nothing
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e)
+      {
+        // do nothing
+      }
+    });
+  }
+
+  private void reportDetailInfoPosition(Integer start, Integer end)
+  {
+    if(dataSource != null)
+    {
+      List<Integer> hopList = dataSource.getHops(start, end);
+      for (AggregatePositionListener listener : listeners)
+      {
+        listener.setDetailedHops(hopList, this);
+      }
+    }
   }
 
   private void reportCurrentPosition(Integer start, Integer end)

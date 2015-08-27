@@ -17,12 +17,14 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
   public static final Integer DEFAULT_BAR_WIDTH = 15;
   public static final Integer DEFAULT_TICK_WIDTH = 20;
   public static final Integer DEFAULT_TICK_COUNT = 20;
+  public static final Integer DEFAULT_TICK_LABEL_GAP = 5;
 
   private Integer verticalGap = DEFAULT_VERTICAL_GAP;
   private Integer horizontalGap = DEFAULT_HORIZONTAL_GAP;
   private Integer barWidth = DEFAULT_BAR_WIDTH;
   private Integer tickWidth = DEFAULT_TICK_WIDTH;
   private Integer tickCount = DEFAULT_TICK_COUNT;
+  private Integer tickLabelGap = DEFAULT_TICK_LABEL_GAP;
 
   private IntegerColorConverter converter;
 
@@ -60,13 +62,15 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
     g.drawLine(barX, topY, barX, bottomY);
 
     // Draw tick marks and labels
+    int textHeight = g.getFontMetrics().getHeight();
+    int textAdjust = (int) (textHeight / 2.6);
     for(int i = 0 ; i <= tickCount ; i++)
     {
       float ratio = (i/(float)tickCount);
       int y = bottomY - (int)(ratio * (bottomY - topY));
       Integer label = (int)(ratio * converter.getMaxValue());
       g.drawLine(barX, y, tickX, y);
-      g.drawString(label.toString(), tickX, y);
+      g.drawString(label.toString(), tickX + tickLabelGap, y + textAdjust);
     }
     g.dispose();
   }

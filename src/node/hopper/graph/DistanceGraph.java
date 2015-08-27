@@ -263,6 +263,23 @@ public class DistanceGraph implements IntegerAggregation
   }
 
   @Override
+  public List<Integer> getHops(Integer start, Integer target)
+  {
+    NodePair pair = NodePair.get(getNode(start), getNode(target));
+    if(!distances.containsKey(pair) || distances.get(pair).isNonterminating())
+      return null;
+    List<Integer> hops = new ArrayList<Integer>();
+    Integer current = start;
+    do
+    {
+      hops.add(current);
+      current = rule.getNextValue(current, target);
+    } while (!current.equals(target));
+    hops.add(target);
+    return hops;
+  }
+
+  @Override
   public boolean isActive()
   {
     return active;
