@@ -141,6 +141,25 @@ public class SimpleRuleLibrary implements RuleLibrary
   }
 
   @Override
+  public Rule getAdd(final int mod)
+  {
+    return new Rule()
+    {
+      @Override
+      public Integer getNextValue(Integer current, Integer target)
+      {
+        return current + mod;
+      }
+
+      @Override
+      public String getDescription()
+      {
+        return "val + " + mod;
+      }
+    };
+  }
+
+  @Override
   public Rule getSubtract(final int mod)
   {
     return new Rule()

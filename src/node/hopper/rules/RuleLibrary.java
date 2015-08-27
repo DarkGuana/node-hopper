@@ -26,5 +26,7 @@ public interface RuleLibrary
 
   Rule getDivide(int mod);
 
+  Rule getAdd(int mod);
+
   Rule getSubtract(int mod);
 }

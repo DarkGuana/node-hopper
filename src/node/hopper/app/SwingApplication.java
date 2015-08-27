@@ -59,15 +59,15 @@ public class SwingApplication
 
   private static DistanceGraph getTestSystem(RuleLibrary library)
   {
-    int width = 1000;
-    int length = 1000;
+    int width  = 10000;
+    int length = 10000;
 
     PrioritizedConditionalRule rule = library.getNewPCRule();
 //    rule.addNewConditional(library.combine(library.getMoreThanTarget(), library.getSubtract(1)));
 //    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(2)));
-    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(100)));
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(10)));
     rule.addNewConditional(
-      library.combine(library.combine(library.getDividableBy(99), library.getMoreThanTarget()), library.getDivide(99)));
+      library.combine(library.combine(library.getDividableBy(101), library.getMoreThanTarget()), library.getDivide(101)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
     DistanceGraph dg = new DistanceGraph(width, length, DistanceGraph.PopulationMethod.FINISH_TO_START, rule);
