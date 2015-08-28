@@ -45,4 +45,16 @@ public class SimpleConditionalRule implements ConditionalRule
   {
     return getDescription();
   }
+
+  @Override
+  public Rule getRule()
+  {
+    return rule;
+  }
+
+  @Override
+  public Conditional getConditional()
+  {
+    return condition;
+  }
 }

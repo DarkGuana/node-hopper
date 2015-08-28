@@ -7,4 +7,7 @@ package node.hopper.rules;
  */
 public interface ConditionalRule extends Rule, Conditional
 {
+  public Rule getRule();
+
+  public Conditional getConditional();
 }

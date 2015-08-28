@@ -34,6 +34,11 @@ public class PrioritizedConditionalRulePanel extends JPanel
       Component subRuleComponent = panelLibrary.getNewRuleComponent(subRule);
       add(getNewSubRulePanel(ruleCount++, subRuleComponent));
     }
+
+    // I like BoxLayouts simplicity, but spacers are ridiculous.
+    JPanel spacer = new JPanel();
+    spacer.setPreferredSize(new Dimension(300, 1));
+    add(spacer);
   }
 
   private JPanel getNewSubRulePanel(int rulePriority, Component subRuleComponent)

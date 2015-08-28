@@ -8,7 +8,7 @@ import java.util.List;
  * applicable.
  * Created by Dark Guana on 2014-03-29.
  */
-public interface PrioritizedConditionalRule extends ConditionalRule
+public interface PrioritizedConditionalRule extends Conditional, Rule
 {
   public void addNewConditional(ConditionalRule rule);
 

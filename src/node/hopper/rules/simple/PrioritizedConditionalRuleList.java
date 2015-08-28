@@ -1,6 +1,8 @@
 package node.hopper.rules.simple;
 
+import node.hopper.rules.Conditional;
 import node.hopper.rules.ConditionalRule;
+import node.hopper.rules.Rule;
 
 import java.util.ArrayList;
 import java.util.Collections;
