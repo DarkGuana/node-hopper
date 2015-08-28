@@ -1,5 +1,7 @@
 package node.hopper.graph;
 
+import node.hopper.rules.Rule;
+
 import java.util.List;
 
 /**
@@ -21,4 +23,6 @@ public interface IntegerAggregation
   public void addListener(IntegerAggregationListener listener);
 
   public void removeListener(IntegerAggregationListener listener);
+
+  public Rule getRule();
 }

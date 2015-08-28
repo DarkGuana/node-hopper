@@ -3,6 +3,7 @@ package node.hopper.rules.simple;
 import node.hopper.rules.ConditionalRule;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,6 +23,12 @@ public class PrioritizedConditionalRuleList implements node.hopper.rules.Priorit
   public void addNewConditional(ConditionalRule rule)
   {
     rules.add(rule);
+  }
+
+  @Override
+  public List<ConditionalRule> getRules()
+  {
+    return Collections.unmodifiableList(rules);
   }
 
   @Override

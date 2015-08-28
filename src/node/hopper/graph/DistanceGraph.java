@@ -297,6 +297,12 @@ public class DistanceGraph implements IntegerAggregation
     listeners.remove(listener);
   }
 
+  @Override
+  public Rule getRule()
+  {
+    return rule;
+  }
+
   public void setActive(boolean active)
   {
     this.active = active;

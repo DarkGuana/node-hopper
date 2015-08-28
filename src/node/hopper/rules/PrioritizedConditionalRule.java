@@ -1,5 +1,7 @@
 package node.hopper.rules;
 
+import java.util.List;
+
 /**
  * A PrioritizedConditionalRule is a collection of other ConditionalRules that will be iterated through in the order
  * they were added.  The container Rule will return the value created by the first rule that reports itself as
@@ -8,5 +10,7 @@ package node.hopper.rules;
  */
 public interface PrioritizedConditionalRule extends ConditionalRule
 {
-  void addNewConditional(ConditionalRule rule);
+  public void addNewConditional(ConditionalRule rule);
+
+  public List<ConditionalRule> getRules();
 }
