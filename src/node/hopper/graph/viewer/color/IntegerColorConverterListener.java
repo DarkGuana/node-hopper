@@ -1,4 +1,6 @@
-package node.hopper.graph.viewer;
+package node.hopper.graph.viewer.color;
+
+import java.awt.*;
 
 /**
  * TODO: Comment this
@@ -7,4 +9,6 @@ package node.hopper.graph.viewer;
 public interface IntegerColorConverterListener
 {
   public void maxValueChanged(Integer maxValue, IntegerColorConverter source);
+
+  public void nonterminatingColorChanged(Color newColor, IntegerColorConverter source);
 }

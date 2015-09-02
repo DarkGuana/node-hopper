@@ -2,7 +2,8 @@ package node.hopper.app;
 
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.IntegerAggregation;
-import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.swing.IntegerColorConverterControls;
 import node.hopper.graph.viewer.swing.IntegerAggregationPanel;
 import node.hopper.graph.viewer.swing.IntegerAggregationStatusPanel;
 import node.hopper.rules.PrioritizedConditionalRule;
@@ -23,12 +24,14 @@ public class SwingApplication
 
   private final JFrame appFrame;
 
-  private IntegerAggregationPanel       reporter;
-  private IntegerAggregation            display;
+  private IntegerAggregationPanel reporter;
+  private IntegerAggregation display;
   private IntegerAggregationStatusPanel reporterStatus;
   private IntegerColorConverter colorConverter = new IntegerColorConverter();
-  private RulesPanel            rulesDisplay   = new RulesPanel(new PanelLibrary());
+  private RulesPanel rulesDisplay = new RulesPanel(new PanelLibrary());
   private JScrollPane reporterScrollPane;
+  private JPanel controlPanel;
+  private IntegerColorConverterControls colorControls;
 
   public SwingApplication(RuleLibrary library)
   {
@@ -46,7 +49,10 @@ public class SwingApplication
   {
     appFrame.getContentPane().add(getReporterScrollPane(), BorderLayout.CENTER);
     appFrame.getContentPane().add(getReporterStatus(), BorderLayout.EAST);
-    appFrame.getContentPane().add(getRulesDisplay(), BorderLayout.SOUTH);
+    appFrame.getContentPane().add(getControlPanel(), BorderLayout.SOUTH);
+
+    controlPanel.add(getRulesDisplay());
+    controlPanel.add(getColorControls());
   }
 
   public void setDisplay(IntegerAggregation display)
@@ -72,12 +78,11 @@ public class SwingApplication
 //    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(2)));
     rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(10)));
     rule.addNewConditional(
-      library
-        .combine(library.combine(library.getDividableBy(301), library.getMoreThanTarget()), library.getDivide(301)));
+        library
+            .combine(library.combine(library.getDividableBy(301), library.getMoreThanTarget()), library.getDivide(301)));
     rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
 
-    DistanceGraph dg = new DistanceGraph(width, length, DistanceGraph.PopulationMethod.FINISH_TO_START, rule);
-    return dg;
+    return new DistanceGraph(width, length, DistanceGraph.PopulationMethod.FINISH_TO_START, rule);
   }
 
   public static void main(String[] args)
@@ -121,5 +126,22 @@ public class SwingApplication
     if (reporterScrollPane == null)
       reporterScrollPane = new JScrollPane(getReporter());
     return reporterScrollPane;
+  }
+
+  public JPanel getControlPanel()
+  {
+    if(controlPanel == null)
+    {
+      controlPanel = new JPanel();
+      controlPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+    }
+    return controlPanel;
+  }
+
+  public IntegerColorConverterControls getColorControls()
+  {
+    if(colorControls == null)
+      colorControls = new IntegerColorConverterControls(colorConverter);
+    return colorControls;
   }
 }

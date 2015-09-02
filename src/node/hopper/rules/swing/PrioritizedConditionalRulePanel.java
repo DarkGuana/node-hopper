@@ -2,7 +2,6 @@ package node.hopper.rules.swing;
 
 import node.hopper.rules.ConditionalRule;
 import node.hopper.rules.PrioritizedConditionalRule;
-import sun.font.GlyphLayout;
 
 import javax.swing.*;
 import java.awt.*;

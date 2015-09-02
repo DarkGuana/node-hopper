@@ -4,6 +4,8 @@ import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.IntegerAggregationListener;
 import node.hopper.graph.viewer.*;
+import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorConverterListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +19,7 @@ import java.util.List;
  * TODO: Comment this
  * Created by Dark Guana on 2014-03-29.
  */
-public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener
+public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener, IntegerColorConverterListener
 {
   private static final int DEFAULT_REPAINTING_TIME = 25;
   private IntegerAggregation    dataSource;
@@ -33,6 +35,7 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
   public IntegerAggregationPanel(IntegerColorConverter converter)
   {
     this.colorPicker = converter;
+    converter.addListener(this);
     addMouseMotionListener(new MouseMotionListener()
     {
       @Override
@@ -219,5 +222,39 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
       startRepainting();
     else
       stopRepainting();
+  }
+
+  @Override
+  public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
+  {
+    // No op, max value's not important in this context
+  }
+
+  @Override
+  public void nonterminatingColorChanged(Color newColor, IntegerColorConverter source)
+  {
+    Runnable repaintNonterminating = new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        Graphics draw = buffer.getGraphics().create();
+        draw.setColor(colorPicker.getNonterminatingColor());
+        for (int x = 0; x < dataSource.getMaxTargetNode(); x++)
+        {
+          for (int y = 0; y < dataSource.getMaxStartNode(); y++)
+          {
+            IntegerAggregate val = dataSource.getAggregate(y, x);
+            if(val != null && val.isNonterminating())
+              draw.drawLine(x, y, x, y);
+          }
+          repaint();
+        }
+        draw.dispose();
+        repaint();
+      }
+    };
+    Thread repaintNonterminatingThread = new Thread(repaintNonterminating, "repaintNonterminating");
+    repaintNonterminatingThread.start();
   }
 }

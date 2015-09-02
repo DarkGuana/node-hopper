@@ -4,7 +4,8 @@ import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.viewer.AggregatePositionListener;
 import node.hopper.graph.viewer.AggregatePositioner;
-import node.hopper.graph.viewer.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.swing.IntegerColorConversionScale;
 
 import javax.swing.*;
 import java.awt.*;

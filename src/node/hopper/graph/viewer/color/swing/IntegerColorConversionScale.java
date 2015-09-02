@@ -1,8 +1,7 @@
-package node.hopper.graph.viewer.swing;
+package node.hopper.graph.viewer.color.swing;
 
-import node.hopper.graph.viewer.IntegerColorConverter;
-import node.hopper.graph.viewer.IntegerColorConverterListener;
-import sun.swing.SwingUtilities2;
+import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorConverterListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,5 +78,11 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
   public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
   {
     repaint();
+  }
+
+  @Override
+  public void nonterminatingColorChanged(Color newColor, IntegerColorConverter source)
+  {
+    // No op, not on scale
   }
 }

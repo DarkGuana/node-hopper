@@ -1,6 +1,5 @@
-package node.hopper.graph.viewer;
+package node.hopper.graph.viewer.color;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import node.hopper.graph.IntegerAggregate;
 
 import java.awt.*;
@@ -23,6 +22,7 @@ public class IntegerColorConverter
 
   private Map<Integer, Color> usedColors = new HashMap<Integer, Color>();
   private final Set<IntegerColorConverterListener> listeners = new HashSet<IntegerColorConverterListener>();
+  private Color nonterminatingColor;
 
   public Color getColor(IntegerAggregate val)
   {
@@ -78,5 +78,19 @@ public class IntegerColorConverter
   public void removeListener(IntegerColorConverterListener listener)
   {
     listeners.remove(listener);
+  }
+
+  public Color getNonterminatingColor()
+  {
+    return nonTerminating;
+  }
+
+  public void setNonterminatingColor(Color nonterminatingColor)
+  {
+    this.nonTerminating = nonterminatingColor;
+    for (IntegerColorConverterListener listener : listeners)
+    {
+      listener.nonterminatingColorChanged(nonTerminating, this);
+    }
   }
 }
