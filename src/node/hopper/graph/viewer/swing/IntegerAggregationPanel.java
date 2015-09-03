@@ -4,8 +4,8 @@ import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.IntegerAggregationListener;
 import node.hopper.graph.viewer.*;
-import node.hopper.graph.viewer.color.IntegerColorConverter;
-import node.hopper.graph.viewer.color.IntegerColorConverterListener;
+import node.hopper.graph.viewer.color.IntegerColorLibrary;
+import node.hopper.graph.viewer.color.IntegerColorLibraryListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +19,11 @@ import java.util.List;
  * TODO: Comment this
  * Created by Dark Guana on 2014-03-29.
  */
-public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener, IntegerColorConverterListener
+public class IntegerAggregationPanel extends JPanel implements AggregatePositioner, IntegerAggregationListener, IntegerColorLibraryListener
 {
   private static final int DEFAULT_REPAINTING_TIME = 25;
   private IntegerAggregation    dataSource;
-  private IntegerColorConverter colorPicker;
+  private IntegerColorLibrary colorPicker;
 
   private Image buffer;
   private Timer repaintTimer = null;
@@ -32,7 +32,7 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
 
   private final List<AggregatePositionListener> listeners = new ArrayList<AggregatePositionListener>(0);
 
-  public IntegerAggregationPanel(IntegerColorConverter converter)
+  public IntegerAggregationPanel(IntegerColorLibrary converter)
   {
     this.colorPicker = converter;
     converter.addListener(this);
@@ -147,6 +147,11 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
   {
     buffer =
       new BufferedImage(dataSource.getMaxTargetNode(), dataSource.getMaxStartNode(), BufferedImage.TYPE_3BYTE_BGR);
+    resetBuffer(false);
+  }
+
+  private void resetBuffer(boolean activeRepaint)
+  {
     Graphics draw = buffer.getGraphics().create();
     for (int x = 0; x < dataSource.getMaxTargetNode(); x++)
     {
@@ -157,8 +162,11 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
         draw.setColor(colorPicker.getColor(val));
         draw.drawLine(x, y, x, y);
       }
+      if(activeRepaint)
+        repaint();
     }
     draw.dispose();
+    repaint();
   }
 
   private void startRepainting()
@@ -225,33 +233,25 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
   }
 
   @Override
-  public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
+  public void maxValueChanged(Integer maxValue, IntegerColorLibrary source)
   {
     // No op, max value's not important in this context
   }
 
   @Override
-  public void nonterminatingColorChanged(Color newColor, IntegerColorConverter source)
+  public void nonterminatingColorChanged(Color newColor, IntegerColorLibrary source)
+  {
+    threadedBufferReset();
+  }
+
+  private void threadedBufferReset()
   {
     Runnable repaintNonterminating = new Runnable()
     {
       @Override
       public void run()
       {
-        Graphics draw = buffer.getGraphics().create();
-        draw.setColor(colorPicker.getNonterminatingColor());
-        for (int x = 0; x < dataSource.getMaxTargetNode(); x++)
-        {
-          for (int y = 0; y < dataSource.getMaxStartNode(); y++)
-          {
-            IntegerAggregate val = dataSource.getAggregate(y, x);
-            if(val != null && val.isNonterminating())
-              draw.drawLine(x, y, x, y);
-          }
-          repaint();
-        }
-        draw.dispose();
-        repaint();
+        resetBuffer(true);
       }
     };
     Thread repaintNonterminatingThread = new Thread(repaintNonterminating, "repaintNonterminating");

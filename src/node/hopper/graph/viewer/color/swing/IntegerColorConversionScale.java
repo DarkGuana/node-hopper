@@ -1,7 +1,7 @@
 package node.hopper.graph.viewer.color.swing;
 
-import node.hopper.graph.viewer.color.IntegerColorConverter;
-import node.hopper.graph.viewer.color.IntegerColorConverterListener;
+import node.hopper.graph.viewer.color.IntegerColorLibrary;
+import node.hopper.graph.viewer.color.IntegerColorLibraryListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * TODO (clm): DOCUMENT ME!!!
  */
-public class IntegerColorConversionScale extends JPanel implements IntegerColorConverterListener
+public class IntegerColorConversionScale extends JPanel implements IntegerColorLibraryListener
 {
   public static final Integer DEFAULT_VERTICAL_GAP = 5;
   public static final Integer DEFAULT_HORIZONTAL_GAP = 5;
@@ -25,9 +25,9 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
   private Integer tickCount = DEFAULT_TICK_COUNT;
   private Integer tickLabelGap = DEFAULT_TICK_LABEL_GAP;
 
-  private IntegerColorConverter converter;
+  private IntegerColorLibrary converter;
 
-  public IntegerColorConversionScale(IntegerColorConverter converter)
+  public IntegerColorConversionScale(IntegerColorLibrary converter)
   {
     this.converter = converter;
     converter.addListener(this);
@@ -75,13 +75,13 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorC
   }
 
   @Override
-  public void maxValueChanged(Integer maxValue, IntegerColorConverter source)
+  public void maxValueChanged(Integer maxValue, IntegerColorLibrary source)
   {
     repaint();
   }
 
   @Override
-  public void nonterminatingColorChanged(Color newColor, IntegerColorConverter source)
+  public void nonterminatingColorChanged(Color newColor, IntegerColorLibrary source)
   {
     // No op, not on scale
   }

@@ -1,7 +1,6 @@
 package node.hopper.graph.viewer.color.swing;
 
-import node.hopper.graph.viewer.color.IntegerColorConverter;
-import sun.awt.OrientableFlowLayout;
+import node.hopper.graph.viewer.color.IntegerColorLibrary;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,12 +16,12 @@ public class IntegerColorConverterControls extends JPanel
       Color.WHITE, Color.RED, Color.PINK, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE,
       Color.MAGENTA};
 
-  private final IntegerColorConverter converter;
+  private final IntegerColorLibrary converter;
   private JPanel nonterminatingColorControl;
   private JComboBox<Color> colorDropdown;
   private Component colorStrategyControl;
 
-  public IntegerColorConverterControls(IntegerColorConverter converter)
+  public IntegerColorConverterControls(IntegerColorLibrary converter)
   {
     this.converter = converter;
 

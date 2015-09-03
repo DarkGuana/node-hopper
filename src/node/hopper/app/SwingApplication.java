@@ -2,7 +2,7 @@ package node.hopper.app;
 
 import node.hopper.graph.DistanceGraph;
 import node.hopper.graph.IntegerAggregation;
-import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorLibrary;
 import node.hopper.graph.viewer.color.swing.IntegerColorConverterControls;
 import node.hopper.graph.viewer.swing.IntegerAggregationPanel;
 import node.hopper.graph.viewer.swing.IntegerAggregationStatusPanel;
@@ -27,7 +27,7 @@ public class SwingApplication
   private IntegerAggregationPanel reporter;
   private IntegerAggregation display;
   private IntegerAggregationStatusPanel reporterStatus;
-  private IntegerColorConverter colorConverter = new IntegerColorConverter();
+  private IntegerColorLibrary colorConverter = new IntegerColorLibrary();
   private RulesPanel rulesDisplay = new RulesPanel(new PanelLibrary());
   private JScrollPane reporterScrollPane;
   private JPanel controlPanel;

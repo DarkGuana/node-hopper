@@ -4,7 +4,7 @@ import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.viewer.AggregatePositionListener;
 import node.hopper.graph.viewer.AggregatePositioner;
-import node.hopper.graph.viewer.color.IntegerColorConverter;
+import node.hopper.graph.viewer.color.IntegerColorLibrary;
 import node.hopper.graph.viewer.color.swing.IntegerColorConversionScale;
 
 import javax.swing.*;
@@ -18,7 +18,7 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
 {
   private static final String HOP_SEPARATOR = " -> ";
 
-  private IntegerColorConverter colorConverter;
+  private IntegerColorLibrary colorConverter;
   private IntegerAggregation    dataSource;
 
   private JPanel startNodePanel;
@@ -38,7 +38,7 @@ public class IntegerAggregationStatusPanel extends JPanel implements AggregatePo
   private JList       reportHopList;
   private Component   reportScale;
 
-  public IntegerAggregationStatusPanel(IntegerColorConverter colorConverter)
+  public IntegerAggregationStatusPanel(IntegerColorLibrary colorConverter)
   {
     super();
     this.colorConverter = colorConverter;
