@@ -215,7 +215,8 @@ public class DistanceGraph implements IntegerAggregation
     if (addDistance)
       distances.put(NodePair.get(start, finish), distance);
 
-    if (addDistance && start.getId() < getMaxStartNode() && finish.getId() < getMaxTargetNode())
+    if (addDistance && start.getId() < getMaxStartNode() && finish.getId() < getMaxTargetNode() &&
+        start.getId() >= 0 && finish.getId() >= 0)
     {
       for (IntegerAggregationListener listener : listeners)
         listener.aggregateChanged(start.getId(), finish.getId(), distance, this);
