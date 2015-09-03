@@ -84,7 +84,7 @@ public class DistanceGraph implements IntegerAggregation
         {
           for (int y = 0; y < maxStart; y++)
           {
-            renderOrder.add(NodePair.get(new Node(y), new Node(x)));
+            renderOrder.add(NodePair.get(getNode(y), getNode(x)));
           }
         }
         Collections.shuffle(renderOrder, r);
@@ -165,8 +165,11 @@ public class DistanceGraph implements IntegerAggregation
       currentNode.addNeighbor(nextNode);
 
       IntegerAggregate distanceCheck = getDistance(nextNode, finish);
-      if (!current.equals(target) &&
-        (history.contains(next) || (distanceCheck != null && distanceCheck.isNonterminating())))
+      if(current.equals(target))
+      {
+        setDistance(start, finish, new IntegerAggregate(i));
+        break;
+      } else if (history.contains(next) || (distanceCheck != null && distanceCheck.isNonterminating()))
       {
         setDistance(start, finish, IntegerAggregate.NONTERMINATING);
         logger.finest("Loop detected / depth exceeded");
@@ -176,10 +179,9 @@ public class DistanceGraph implements IntegerAggregation
         setDistance(start, finish, new IntegerAggregate(i + distanceCheck.getValue() + 1));
         logger.finest("Previous target found (" + current + " -> " + target + ", " + distanceCheck + ") + " + i);
         break;
-      } else if (currentNode.equals(finish))
+      } else if(distances.get(NodePair.get(start, currentNode)) == null)
       {
-        setDistance(start, finish, new IntegerAggregate(i));
-        logger.finest("Setting (" + start.getId() + " -> " + currentNode.getId() + ") to " + i);
+        setDistance(start, currentNode, new IntegerAggregate(i));
       }
 
       logger.finest(current + " -> " + next);
@@ -270,11 +272,11 @@ public class DistanceGraph implements IntegerAggregation
       return null;
     List<Integer> hops = new ArrayList<Integer>();
     Integer current = start;
-    do
+    while (!current.equals(target))
     {
       hops.add(current);
       current = rule.getNextValue(current, target);
-    } while (!current.equals(target));
+    }
     hops.add(target);
     return hops;
   }
