@@ -91,4 +91,15 @@ public class IntegerColorLibrary
       listener.nonterminatingColorChanged(nonTerminating, this);
     }
   }
+
+  public void setConverter(IntegerColorConverter converter)
+  {
+    this.converter = converter;
+    usedColors.clear();
+
+    for (IntegerColorLibraryListener listener : listeners)
+    {
+      listener.converterChanged(converter, this);
+    }
+  }
 }

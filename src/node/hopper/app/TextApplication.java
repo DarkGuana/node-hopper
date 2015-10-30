@@ -39,7 +39,7 @@ public class TextApplication
     rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(100)));
     rule.addNewConditional(
       library.combine(library.combine(library.getDividableBy(99), library.getMoreThanTarget()), library.getDivide(99)));
-    rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
+    rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(2)));
 
     DistanceGraph dg = new DistanceGraph(width, length, DistanceGraph.PopulationMethod.START_TO_FINISH, rule);
     dg.populateAllDistances();

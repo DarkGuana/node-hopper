@@ -76,11 +76,11 @@ public class SwingApplication
     PrioritizedConditionalRule rule = library.getNewPCRule();
 //    rule.addNewConditional(library.combine(library.getMoreThanTarget(), library.getSubtract(1)));
 //    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(2)));
-    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(10)));
-    rule.addNewConditional(
-        library
-            .combine(library.combine(library.getDividableBy(301), library.getMoreThanTarget()), library.getDivide(301)));
-    rule.addNewConditional(library.combine(library.getMoreThan(0), library.getSubtract(1)));
+    rule.addNewConditional(library.combine(library.getLessThanTarget(), library.getMultiply(2)));
+//    rule.addNewConditional(
+//        library
+//            .combine(library.combine(library.getDividableBy(301), library.getMoreThanTarget()), library.getDivide(301)));
+    rule.addNewConditional(library.combine(library.getMoreThanTarget(), library.getSubtract(1)));
 
     return new DistanceGraph(width, length, DistanceGraph.PopulationMethod.FINISH_TO_START, rule);
   }

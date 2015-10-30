@@ -4,6 +4,7 @@ import node.hopper.graph.IntegerAggregate;
 import node.hopper.graph.IntegerAggregation;
 import node.hopper.graph.IntegerAggregationListener;
 import node.hopper.graph.viewer.*;
+import node.hopper.graph.viewer.color.IntegerColorConverter;
 import node.hopper.graph.viewer.color.IntegerColorLibrary;
 import node.hopper.graph.viewer.color.IntegerColorLibraryListener;
 
@@ -240,6 +241,12 @@ public class IntegerAggregationPanel extends JPanel implements AggregatePosition
 
   @Override
   public void nonterminatingColorChanged(Color newColor, IntegerColorLibrary source)
+  {
+    threadedBufferReset();
+  }
+
+  @Override
+  public void converterChanged(IntegerColorConverter newConverter, IntegerColorLibrary source)
   {
     threadedBufferReset();
   }

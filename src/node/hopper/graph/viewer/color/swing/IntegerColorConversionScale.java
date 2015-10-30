@@ -1,5 +1,6 @@
 package node.hopper.graph.viewer.color.swing;
 
+import node.hopper.graph.viewer.color.IntegerColorConverter;
 import node.hopper.graph.viewer.color.IntegerColorLibrary;
 import node.hopper.graph.viewer.color.IntegerColorLibraryListener;
 
@@ -84,5 +85,11 @@ public class IntegerColorConversionScale extends JPanel implements IntegerColorL
   public void nonterminatingColorChanged(Color newColor, IntegerColorLibrary source)
   {
     // No op, not on scale
+  }
+
+  @Override
+  public void converterChanged(IntegerColorConverter newConverter, IntegerColorLibrary source)
+  {
+    repaint();
   }
 }

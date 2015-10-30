@@ -11,4 +11,6 @@ public interface IntegerColorLibraryListener
   public void maxValueChanged(Integer maxValue, IntegerColorLibrary source);
 
   public void nonterminatingColorChanged(Color newColor, IntegerColorLibrary source);
+
+  public void converterChanged(IntegerColorConverter newConverter, IntegerColorLibrary source);
 }
